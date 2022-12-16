@@ -1,0 +1,10 @@
+{
+  "Duke": {
+    "region": "east",
+    "seed": 1
+  },
+  "North Carolina": {
+    "region": "east",
+    "seed": 2
+  }
+}
