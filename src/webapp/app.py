@@ -33,9 +33,9 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/schools/')
-def schools():
-    query = 'select School,W from tbl_schools limit 20'
+@app.route('/roster/')
+def roster():
+    query = 'select * from vw_Roster where PPG > 2'
     df = get_table_data(query)
     return render_template('table_embed.html',
                            column_names=df.columns.values,
