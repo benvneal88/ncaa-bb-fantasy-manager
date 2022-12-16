@@ -149,6 +149,7 @@ def insert_stg_schools(engine):
 
 def insert_stg_roster(engine, school_list=[]):
     summary_parse_regex = re.compile(r"([0-9\.]{3,}).*([0-9\.]{3,}).*([0-9\.]{3,}).*")
+    name_parse_regex = re.compile(r"([a-zA-Z'\.]+) ([a-zA-Z'\. ]+)")
 
     def _parse_summary(summary_str):
         groups = re.match(summary_parse_regex, summary_str)
@@ -156,6 +157,18 @@ def insert_stg_roster(engine, school_list=[]):
         rpg = groups.group(2)
         apg = groups.group(3)
         return ppg, rpg, apg
+
+    def _parse_name(name_str):
+        groups = re.match(name_parse_regex, name_str)
+        try:
+            first_name = groups.group(1)
+            last_name = groups.group(2)
+        except Exception as e:
+            logger.error(f"Unable to parse first and last name from {name_str}")
+            first_name = 'error'
+            last_name = 'error'
+
+        return first_name, last_name
 
     delete_table(engine, STG_ROSTER_TABLE_NAME)
 
@@ -165,6 +178,9 @@ def insert_stg_roster(engine, school_list=[]):
         roster_df["School"] = school_name
         roster_df["PPG"], roster_df["RPG"], roster_df["APG"] = zip(*roster_df['Summary'].apply(lambda x: _parse_summary(x)))
         roster_df = roster_df.drop("Summary", axis=1)
+
+        roster_df["First Name"], roster_df["Last Name"] = zip(*roster_df['Player'].apply(lambda x: _parse_name(x)))
+        roster_df = roster_df.drop("Player", axis=1)
 
         logger.info(f"Inserting roster {school_name} into table {STG_ROSTER_TABLE_NAME}")
         roster_df.to_sql(STG_ROSTER_TABLE_NAME, con=engine, if_exists='append')
