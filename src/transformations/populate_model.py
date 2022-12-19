@@ -13,7 +13,9 @@ LOG_LEVEL = 'INFO'
 
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 
-
+######
+# Helper Function
+######
 def truncate_table(engine, table_name):
     logger.info(f'deleting all rows from table {table_name}')
     # delete target table
@@ -30,6 +32,9 @@ def create_table(engine, table_name):
         connection.execute(create_table_ddl)
 
 
+######
+# Table Inserting Functions
+######
 def tbl_ball_team(engine):
     table_name = 'tbl_ball_team'
     with open('src/config/tournament_teams.json', 'r') as f:

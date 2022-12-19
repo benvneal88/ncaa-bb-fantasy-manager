@@ -14,5 +14,9 @@
   "Team Kim": {
     "display_name": "Kim",
     "draft_order": "4"
+  },
+  "K2": {
+    "display_name": "K2",
+    "draft_order": "5"
   }
 }
