@@ -14,7 +14,7 @@ LOG_LEVEL = 'INFO'
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 
 ######
-# Helper Function
+# Helper Functions
 ######
 def truncate_table(engine, table_name):
     logger.info(f'deleting all rows from table {table_name}')
@@ -31,6 +31,39 @@ def create_table(engine, table_name):
     with engine.connect() as connection:
         connection.execute(create_table_ddl)
 
+
+def seed_draft_events(engine):
+    ## UNTESTED
+    with open('src/config/seed_draft_events.json', 'r') as f:
+        draft_events = json.load(f)
+
+    fantasy_teams_df = pandas.read_sql_query(f"select id, name from tbl_fantasy_team", con=engine)
+    player_df = pandas.read_sql_query(f"select id, name from tbl_player", con=engine)
+
+    count = 1
+
+    for draft_event in draft_events:
+        fantasy_team_id = None
+        player_id = None
+
+        player_name = draft_event.get('player_name')
+        fantasy_team_name = draft_event.get('fantasy_team_name')
+
+        try:
+            fantasy_team_id = fantasy_teams_df[fantasy_teams_df['name'] == fantasy_team_name].iloc[0]['id']
+        except Exception as e:
+            logger.error(f"Unable to find fantasy team name {fantasy_team_name}")
+        try:
+            player_id = player_df[player_df['name'] == player_name].iloc[0]['id']
+        except Exception as e:
+
+        if player_id and fantasy_team_id:
+            update_sql = f"update tbl_player set drafted_number = {count}, fk_fantasy_team_id = {fantasy_team_id} where id = {player_id}"
+            with engine.connect() as connection:
+                connection.execute(update_sql)
+
+            logger.info(f"with the {count} pick, the team {fantasy_team_name} picks player {player_name}")
+            count = + 1
 
 ######
 # Table Inserting Functions
