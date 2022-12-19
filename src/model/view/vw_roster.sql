@@ -1,4 +1,4 @@
-create or replace view vw_Roster
+create or replace view vw_roster
 as
 select
 	bt.Name as TeamName,

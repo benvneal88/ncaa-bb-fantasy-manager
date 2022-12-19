@@ -1,7 +1,18 @@
 {
-  "Neals Heels": {
-    "display_name": "Heels",
-    "owner": "Ben Neal",
-    "draft_order": 1
+  "Team Neal": {
+    "display_name": "Neal",
+    "draft_order": "1"
+  },
+  "Team Ben": {
+    "display_name": "Ben",
+    "draft_order": "2"
+  },
+  "Team Collin": {
+    "display_name": "Collin",
+    "draft_order": "3"
+  },
+  "Team Kim": {
+    "display_name": "Kim",
+    "draft_order": "4"
   }
 }

@@ -1,6 +1,22 @@
 {
   "Ben Neal": {
     "email": "ben_neal@gmail.com",
-    "is_active": 1
+    "is_active": 1,
+    "team_ownership": ["Team Neal", "Team Ben"]
+  },
+  "Collin Danielson": {
+    "email": "collin@gmail.com",
+    "is_active": 1,
+    "team_ownership": ["Team Collin"]
+  },
+  "John Neal": {
+    "email": "john_neal@gmail.com",
+    "is_active": 1,
+    "team_ownership": ["Team Neal", "Team Ben"]
+  },
+  "Kim Horworth": {
+    "email": "kim@gmail.com",
+    "is_active": 1,
+    "team_ownership": ["Team Kim"]
   }
 }
