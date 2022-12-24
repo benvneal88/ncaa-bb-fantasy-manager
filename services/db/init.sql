@@ -1,0 +1,2 @@
+create user svc_app_user
+create database ncaa_fantasy

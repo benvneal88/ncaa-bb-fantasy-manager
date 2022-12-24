@@ -1,12 +1,10 @@
-import pandas
 import os
 import sys
 import json
 import pandas
 sys.path.append(os.getcwd())
-from src.utils import database as db_util
-from src.utils import logger as log_util
-from src.config.constants import DATABASE_NAME
+from ncaa_fantasy.utils import logger as log_util, database as db_util
+from ncaa_fantasy.config.constants import DATABASE_NAME
 
 LOGGER_NAME = 'populdate_model'
 LOG_LEVEL = 'INFO'
@@ -53,9 +51,11 @@ def seed_draft_events(engine):
             fantasy_team_id = fantasy_teams_df[fantasy_teams_df['name'] == fantasy_team_name].iloc[0]['id']
         except Exception as e:
             logger.error(f"Unable to find fantasy team name {fantasy_team_name}")
+
         try:
             player_id = player_df[player_df['name'] == player_name].iloc[0]['id']
         except Exception as e:
+            logger.error(f"Unable to find player with name {player_name}")
 
         if player_id and fantasy_team_id:
             update_sql = f"update tbl_player set drafted_number = {count}, fk_fantasy_team_id = {fantasy_team_id} where id = {player_id}"

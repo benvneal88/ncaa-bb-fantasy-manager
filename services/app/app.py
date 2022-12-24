@@ -1,9 +1,6 @@
-import os
-import sys
 import pandas
-sys.path.append(os.getcwd())
 
-from src.utils import database as db_util
+from ncaa_fantasy.utils import database as db_util
 from flask import Flask, render_template
 
 from dotenv import load_dotenv

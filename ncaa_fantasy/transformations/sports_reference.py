@@ -6,11 +6,9 @@ from bs4 import BeautifulSoup
 
 
 sys.path.append(os.getcwd())
-from src.utils import data_source as data_src_util
-from src.utils import logger as log_util
-from src.utils import database as db_util
+from ncaa_fantasy.utils import logger as log_util, database as db_util, data_source as data_src_util
 
-from src.config.constants import DATABASE_NAME
+from ncaa_fantasy.config.constants import DATABASE_NAME
 
 LOGGER_NAME = 'sports_reference'
 LOG_LEVEL = 'INFO'

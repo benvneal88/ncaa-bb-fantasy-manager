@@ -1,10 +1,6 @@
-import sys
-import os
-
 import requests
-import logging
 
-from src.utils import logger as log_util
+from ncaa_fantasy.utils import logger as log_util
 
 
 def download_file(url, file_path):
