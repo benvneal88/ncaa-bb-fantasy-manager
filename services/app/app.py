@@ -1,15 +1,19 @@
 import pandas
 
 from ncaa_fantasy.utils import database as db_util
+from ncaa_fantasy.model.settings import APP_DATABASE_NAME
 from flask import Flask, render_template
 
 from dotenv import load_dotenv
 load_dotenv()
 
+#HOST = "127.0.0.1" # for local development
+HOST = "0.0.0.0" # for docker deployment
 app = Flask(__name__)
 
+
 def get_table_data(query):
-    engine = db_util.get_engine('fantasy_mgr')
+    engine = db_util.get_engine(APP_DATABASE_NAME)
     df = pandas.read_sql_query(query, con=engine)
     #count = int(df.iloc[0]['count'])
     return df
@@ -45,4 +49,4 @@ def about():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host=HOST, debug=True)

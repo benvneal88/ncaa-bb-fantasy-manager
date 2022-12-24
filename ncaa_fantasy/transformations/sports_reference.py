@@ -3,12 +3,10 @@ import sys
 import pandas
 import re
 from bs4 import BeautifulSoup
-
-
-sys.path.append(os.getcwd())
+#sys.path.append(os.getcwd())
 from ncaa_fantasy.utils import logger as log_util, database as db_util, data_source as data_src_util
 
-from ncaa_fantasy.config.constants import DATABASE_NAME
+from ncaa_fantasy.model.settings import STAGING_DATABASE_NAME
 
 LOGGER_NAME = 'sports_reference'
 LOG_LEVEL = 'INFO'

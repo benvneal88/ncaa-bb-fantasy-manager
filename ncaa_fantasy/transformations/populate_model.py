@@ -4,7 +4,7 @@ import json
 import pandas
 sys.path.append(os.getcwd())
 from ncaa_fantasy.utils import logger as log_util, database as db_util
-from ncaa_fantasy.config.constants import DATABASE_NAME
+from ncaa_fantasy.model.settings import APP_DATABASE_NAME
 
 LOGGER_NAME = 'populdate_model'
 LOG_LEVEL = 'INFO'
@@ -230,7 +230,7 @@ def create_schema(engine):
 
 
 if __name__ == '__main__':
-    e = db_util.get_engine(DATABASE_NAME)
+    e = db_util.get_engine(APP_DATABASE_NAME)
     #populate_model(e, tbl_ball_team)
     #populate_model(e, tbl_player)
     #populate_model(e, tbl_user)
