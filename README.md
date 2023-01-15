@@ -1,10 +1,16 @@
 # ncaa-bb-fantasy-manager
 
+This project contains a webapp and database for managing ncaa basketball march madness fantasy.
+
+Build docker services:
 `docker compose up`
 
-Build Docker for app
-`docker build -f app.Dockerfile -t ncaa_fantasy/app .`
-`docker run -d -p 5000:5000 ncaa_fantasy/app`
+
+Dependencies:
+Use requirements-dev.txt for local development.
+Additional dependencies for lxml must be resolved
+https://lxml.de/installation.html#requirements
+
 
 export $(grep -v '^#' .env | xargs)
 

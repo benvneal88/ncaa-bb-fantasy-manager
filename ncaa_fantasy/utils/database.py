@@ -1,10 +1,9 @@
 import os
-
 import sqlalchemy
 
 
 def get_engine(database_name):
-    engine = sqlalchemy.create_engine(f"mysql+pymysql://root:{os.getenv('db_password')}@{os.getenv('db_host')}/{database_name}")
+    engine = sqlalchemy.create_engine(f"mysql+pymysql://{os.getenv('db_user')}:{os.getenv('db_password')}@{os.getenv('db_host')}/{database_name}")
     return engine
 
 
