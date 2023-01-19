@@ -4,12 +4,13 @@ services:
     build:
       context: .
       dockerfile: app.Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
     links:
       - db
     ports:
       - "5000:5000"
     env_file:
-      - .env.dev
+      - .env.prod
   db:
     image: mysql:8.0
     ports:
