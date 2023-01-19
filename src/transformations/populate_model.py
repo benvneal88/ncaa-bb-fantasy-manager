@@ -3,8 +3,8 @@ import sys
 import json
 import pandas
 sys.path.append(os.getcwd())
-from ncaa_fantasy.utils import logger as log_util, database as db_util
-from ncaa_fantasy.model.settings import APP_DATABASE_NAME
+from src.utils import logger as log_util, database as db_util
+from src.model.settings import APP_DATABASE_NAME
 
 LOGGER_NAME = 'populdate_model'
 LOG_LEVEL = 'INFO'
@@ -19,15 +19,6 @@ def truncate_table(engine, table_name):
     # delete target table
     with engine.connect() as connection:
         connection.execute(f"delete from {table_name} where 1=1")
-
-
-def create_table(engine, table_name):
-    # UNTESTED
-    with open(f'src/model/schema/{table_name}.sql', 'r') as file:
-        create_table_ddl = file.read()
-
-    with engine.connect() as connection:
-        connection.execute(create_table_ddl)
 
 
 def seed_draft_events(engine):
@@ -112,25 +103,13 @@ def tbl_player(engine):
 
 def tbl_user(engine):
     table_name = 'tbl_user'
-    with open('src/config/users.json', 'r') as f:
-        config = json.load(f)
 
-    insert_df = pandas.DataFrame(columns=['name', 'email', 'is_active'])
+    users_df = pandas.read_csv('src/config/users.csv')
 
-    for name, value_dict in config.items():
-        data_dict = {
-            'name': [name],
-            'email': [value_dict.get('email')],
-            'is_active': [value_dict.get('is_active')],
-        }
-        df = pandas.DataFrame(data=data_dict)
-        # print(df)
-        insert_df = pandas.concat([insert_df, df])
-
-    print(insert_df)
+    print(users_df)
     truncate_table(engine, table_name)
 
-    logger.info(f'inserting {len(insert_df)} rows into table {table_name}')
+    logger.info(f'inserting {len(users_df)} rows into table {table_name}')
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 
@@ -214,19 +193,6 @@ def tbl_fantasy_team_user_mtm(engine):
 
 def populate_model(engine, table_name):
     table_name(engine=engine)
-
-
-def create_schema(engine):
-    # UNTESTED
-    create_tables = [
-        'tbl_user',
-        'tbl_ball_team',
-        'tbl_fantasy_team',
-        'tbl_fantasy_team_user_mtm',
-    ]
-
-    for table_name in create_tables:
-        create_table(engine, table_name)
 
 
 if __name__ == '__main__':

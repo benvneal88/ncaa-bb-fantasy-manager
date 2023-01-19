@@ -1,6 +1,6 @@
 import requests
 
-from ncaa_fantasy.utils import logger as log_util
+from src.utils import logger as log_util
 
 
 def download_file(url, file_path):

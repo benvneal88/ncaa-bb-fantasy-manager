@@ -1,4 +1,4 @@
-CREATE TABLE `fantasy_mgr`.`tbl_ball_team` (
+CREATE TABLE IF NOT EXISTS `tbl_ball_team` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `name_short` VARCHAR(255) NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE `fantasy_mgr`.`tbl_box_score_line_item` (
+CREATE TABLE IF NOT EXISTS `tbl_box_score_line_item` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fk_game_id` INT NOT NULL,
   `fk_player_id` INT NOT NULL,
@@ -10,11 +10,11 @@ CREATE TABLE `fantasy_mgr`.`tbl_box_score_line_item` (
   INDEX `fk_player_idx` (`fk_player_id` ASC) VISIBLE,
   CONSTRAINT `fk_game`
     FOREIGN KEY (`fk_game_id`)
-    REFERENCES `fantasy_mgr`.`tbl_game` (`id`)
+    REFERENCES `tbl_game` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_player`
     FOREIGN KEY (`fk_player_id`)
-    REFERENCES `fantasy_mgr`.`tbl_player` (`id`)
+    REFERENCES `tbl_player` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION);

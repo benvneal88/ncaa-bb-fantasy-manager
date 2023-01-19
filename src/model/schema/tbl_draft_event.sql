@@ -1,4 +1,4 @@
-CREATE TABLE `fantasy_mgr`.`tbl_draft_event` (
+CREATE TABLE IF NOT EXISTS `tbl_draft_event` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fk_fantasy_team_id` INT NOT NULL,
   `fk_player_id` INT NOT NULL,
@@ -8,11 +8,11 @@ CREATE TABLE `fantasy_mgr`.`tbl_draft_event` (
   INDEX `fk_player_id_idx` (`fk_player_id` ASC) VISIBLE,
   CONSTRAINT `fk_fantasy_team_id`
     FOREIGN KEY (`fk_fantasy_team_id`)
-    REFERENCES `fantasy_mgr`.`tbl_fantasy_team` (`id`)
+    REFERENCES `tbl_fantasy_team` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_player_id`
     FOREIGN KEY (`fk_player_id`)
-    REFERENCES `fantasy_mgr`.`tbl_player` (`id`)
+    REFERENCES `tbl_player` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION);

@@ -1,23 +1,25 @@
 # Use an official Python runtime as an image
-FROM python:3.10
+FROM python:3.10.7-slim-buster
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Flask apps listen to port 5000
 EXPOSE 5000
 
-# Copy the project code
-WORKDIR /ncaa_fantasy/
-COPY /ncaa_fantasy/ ./ncaa_fantasy/
-
 # Install the project
-COPY setup.py /ncaa_fantasy/setup.py
-RUN pip install -e .
+COPY /src/ /src/
 
-# Copy app service code
-WORKDIR /ncaa_fantasy/app/
-COPY /services/app/ ./
+# Copy app code
+COPY /services/app/ /src/app/
 
 # Install app service dependencies
-RUN pip install -r requirements.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install -r /src/app/requirements.txt
+
+COPY /setup.py /
+RUN pip3 install -e .
 
 # Launch Flask App
-CMD python /ncaa_fantasy/app/app.py
+CMD python /src/app/app.py

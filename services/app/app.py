@@ -1,11 +1,16 @@
+import os
 import pandas
-
-from ncaa_fantasy.utils import database as db_util
-from ncaa_fantasy.model.settings import APP_DATABASE_NAME
+import time
 from flask import Flask, render_template
-
 from dotenv import load_dotenv
+
+from src.utils import database as db_util
+from src.model.settings import APP_DATABASE_NAME
+from src.utils import logger as log_util
+
 load_dotenv()
+
+logger = log_util.get_logger(__name__, 'INFO')
 
 #HOST = "127.0.0.1" # for local development
 HOST = "0.0.0.0" # for docker deployment
@@ -49,4 +54,7 @@ def about():
 
 
 if __name__ == '__main__':
-    app.run(host=HOST, debug=True)
+    # wait for database service to startup
+    time.sleep(5)
+    db_util.init_database(APP_DATABASE_NAME)
+    app.run(host='0.0.0.0', debug=True)

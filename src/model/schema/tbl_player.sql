@@ -1,4 +1,4 @@
-CREATE TABLE `tbl_player` (
+CREATE TABLE IF NOT EXISTS `tbl_player` (
   `id` int NOT NULL AUTO_INCREMENT,
   `first_name` varchar(80) NOT NULL,
   `last_name` varchar(80) NOT NULL,

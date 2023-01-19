@@ -1,7 +1,7 @@
 create or replace view vw_fantasy_team_ownership
 as
 select
-	u.name as OwnerName,
+	u.first_name + ' ' + u.last_name as OwnerName,
     u.is_active as IsActive,
     ft.name as TeamName
 from tbl_user u

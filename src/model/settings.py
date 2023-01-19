@@ -1,4 +1,4 @@
-APP_DATABASE_NAME = 'fantasy_mgr'
+APP_DATABASE_NAME = 'ncaa_fantasy'
 STAGING_DATABASE_NAME = 'staging'
 
 SCHEMA_BUILD_ORDER = [

@@ -1,4 +1,4 @@
-CREATE TABLE `tbl_game` (
+CREATE TABLE IF NOT EXISTS `tbl_game` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `event_date` date DEFAULT NULL,

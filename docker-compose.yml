@@ -8,7 +8,8 @@ services:
       - db
     ports:
       - "5000:5000"
-
+    env_file:
+      - .env_docker
   db:
     image: mysql:8.0
     ports:
