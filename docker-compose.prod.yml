@@ -1,6 +1,6 @@
 services:
   app:
-    build: ./app.Dockerfile
+    build: ./
     command: gunicorn --bind 0.0.0.0:5000 manage:app
     links:
       - db
