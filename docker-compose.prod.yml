@@ -21,7 +21,9 @@ services:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 
   nginx:
-    build: ./services/nginx
+    build:
+      context: ./services/nginx
+      dockerfile: ./services/nginx
     ports:
       - 1337:80
     depends_on:
