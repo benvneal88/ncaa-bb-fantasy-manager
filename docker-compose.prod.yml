@@ -1,7 +1,7 @@
 services:
   app:
     build: ./
-    command: gunicorn --workders 2 --name ncaa-fantasy-app --bind 0.0.0.0:5000 --chdir /src/app/ wsgi
+    command: gunicorn --workers 2 --name ncaa-fantasy-app --bind 0.0.0.0:5000 --chdir /src/app/ wsgi
     links:
       - db
     expose:
