@@ -1,7 +1,7 @@
 services:
   app:
     build: ./
-    command: gunicorn --bind 0.0.0.0:5000 '/src/app/app:create_app()'
+    command: gunicorn --bind 0.0.0.0:5000 /src/app/wsgi
     links:
       - db
     expose:
