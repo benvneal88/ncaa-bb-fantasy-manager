@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: app.Dockerfile
+      dockerfile: Dockerfile
     links:
       - db
     ports:
