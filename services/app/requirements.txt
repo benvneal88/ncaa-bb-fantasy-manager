@@ -7,4 +7,4 @@ SQLAlchemy==1.4.45
 Flask==2.2.2
 python-dotenv==0.21.0
 cryptography
-gunicorn
+gunicorn==20.1.0

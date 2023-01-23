@@ -6,7 +6,7 @@ Build docker services:
 `docker compose build`
 `docker compose up`
 
-    docker compose -f docker-compose.prod.yml up --build
+    docker compose -f docker-compose.prod.yml up
 
 Troubleshooting:
 

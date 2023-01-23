@@ -1,7 +1,7 @@
 services:
   app:
     build: ./
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    command: gunicorn --bind 0.0.0.0:5000 app:create_app()
     links:
       - db
     expose:

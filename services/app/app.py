@@ -53,8 +53,15 @@ def about():
     return render_template('about.html')
 
 
-if __name__ == '__main__':
-    # wait for database service to startup
-    time.sleep(5)
+
+def create_app():
     db_util.init_database(APP_DATABASE_NAME)
-    app.run(host='0.0.0.0', debug=True)
+    #app.run(host='0.0.0.0', debug=True)
+    app.run()
+
+#
+# if __name__ == '__main__':
+#     # wait for database service to startup
+#     time.sleep(5)
+#     db_util.init_database(APP_DATABASE_NAME)
+#     app.run(host='0.0.0.0', debug=True)
