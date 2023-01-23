@@ -1,4 +1,10 @@
 version: "2"
+
+secrets:
+  db_password:
+    file: ./db_pass.txt
+
+
 services:
   app:
     build:
@@ -16,8 +22,10 @@ services:
     image: mysql:8.0
     ports:
       - "32000:3306"
+    secrets:
+      - db_password
     environment:
-      MYSQL_ROOT_PASSWORD: "${db_password}"
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_password
     volumes:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 
