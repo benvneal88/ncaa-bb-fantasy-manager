@@ -1,10 +1,5 @@
 version: "2"
 
-secrets:
-  db_password:
-    file: ./db_pass.txt
-
-
 services:
   app:
     build:
@@ -35,3 +30,7 @@ services:
       - 1337:80
     depends_on:
       - app
+
+secrets:
+  db_password:
+    file: ./.db_pass
