@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: app.Dockerfile
+    build: ./app.Dockerfile
     command: gunicorn --bind 0.0.0.0:5000 manage:app
     links:
       - db
@@ -21,9 +19,7 @@ services:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 
   nginx:
-    build:
-      context: ./services/nginx
-      dockerfile: ./services/nginx
+    build: ./services/nginx/
     ports:
       - 1337:80
     depends_on:
