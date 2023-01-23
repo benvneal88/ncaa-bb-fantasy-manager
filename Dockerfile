@@ -22,4 +22,4 @@ COPY /setup.py /
 RUN pip3 install -e .
 
 # Launch Flask App
-CMD python /src/app/app.py
+#CMD python /src/app/app.py
