@@ -17,3 +17,5 @@ soupsieve==2.3.2.post1
 SQLAlchemy==1.4.45
 urllib3==1.26.13
 webencodings==0.5.1
+gunicorn
+flask
