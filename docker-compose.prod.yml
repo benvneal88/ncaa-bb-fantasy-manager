@@ -1,20 +1,20 @@
 services:
   app:
-    build: ./
+    build: ./services/app/
     command: gunicorn wsgi:app --bind 0.0.0.0:8080 --log-level=debug --workers=4
     links:
       - db
     ports:
       - 8080:8080
     env_file:
-      - .env.dev
+      - .env.prod
 
   db:
     image: mysql:8.0
     ports:
       - "32000:3306"
     env_file:
-      - .env.db.dev
+      - .env.db.prod
     volumes:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 
