@@ -1,7 +1,7 @@
 services:
   app:
     build: ./services/app/
-    command: gunicorn wsgi:app --bind 0.0.0.0:8080 --log-level=debug --workers=4
+    command: gunicorn 'wsgi:create_app()' --bind 0.0.0.0:8080 --log-level=debug --workers=4
     links:
       - db
     ports:
@@ -21,6 +21,6 @@ services:
   nginx:
     build: ./services/nginx/
     ports:
-      - 80:80
+      - 1337:8080
     depends_on:
       - app

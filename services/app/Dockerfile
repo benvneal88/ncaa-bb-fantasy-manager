@@ -9,6 +9,7 @@ WORKDIR /src
 
 RUN pip install --upgrade pip
 RUN pip install -U pip && pip install -r requirements.txt
+#RUN pip install -e
 
 RUN useradd app_runner
 USER app_runner
