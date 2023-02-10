@@ -1,6 +1,6 @@
 import requests
 
-import utils.logger as log_util
+import api.utils.logger as log_util
 
 
 def download_file(url, file_path):

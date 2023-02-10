@@ -1,8 +1,9 @@
 import pandas
 from flask import Blueprint
 from flask import Flask, Response, jsonify, request, render_template
-from utils import database as db_util
-from model.settings import APP_DATABASE_NAME
+
+from api.utils import database as db_util
+from api.model.settings import APP_DATABASE_NAME
 
 route_blueprint = Blueprint('route_blueprint', __name__)
 

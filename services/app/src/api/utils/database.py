@@ -1,6 +1,6 @@
 import os
 import sqlalchemy
-import utils.logger as log_util
+import api.utils.logger as log_util
 
 logger = log_util.get_logger(__name__, 'INFO')
 
