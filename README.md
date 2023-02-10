@@ -2,7 +2,11 @@
 
 This project contains a webapp and database for managing ncaa basketball march madness fantasy.
 
-### Running App Locally
+### Developing App Locally
+    cd services/app/src
+    flask --debug run 
+
+### Running Web App Locally
     docker compose -f docker-compose.dev.yml up --build
 
 ### Running App in Production

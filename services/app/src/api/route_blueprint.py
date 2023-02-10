@@ -46,6 +46,6 @@ def roster():
                            row_data=list(df.values.tolist()), zip=zip)
 
 
-@route_blueprint.route('/about/')
-def about():
-    return render_template('about.html')
+@route_blueprint.route('/roadmap/')
+def roadmap():
+    return render_template('roadmap.html')
