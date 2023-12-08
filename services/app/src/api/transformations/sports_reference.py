@@ -3,8 +3,9 @@ import pandas
 import re
 from bs4 import BeautifulSoup
 #sys.path.append(os.getcwd())
-from src.utils import logger as log_util, database as db_util
-from src.utils import data_source as data_src_util
+from api.utils import logger as log_util
+from api import model
+from api.utils import data_source
 
 LOGGER_NAME = 'sports_reference'
 LOG_LEVEL = 'INFO'
@@ -15,7 +16,7 @@ DATA_SOURCE = 'sportsref'
 STG_SCHOOLS_TABLE_NAME = 'stg_sportsref_schools'
 STG_ROSTER_TABLE_NAME = 'stg_sportsref_roster'
 
-ROOT_DATA_PATH = os.path.join(os.getcwd(), "src", "data", DATA_SOURCE)
+ROOT_DATA_PATH = os.path.join(os.getcwd(), "api", "data", DATA_SOURCE)
 
 
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
@@ -25,7 +26,7 @@ logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 ## Helper Functions
 #####################
 def get_roster_url(school):
-    engine = db_util.get_engine(DATABASE_NAME)
+    engine = model.get_engine()
     query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {STG_SCHOOLS_TABLE_NAME} where School = '{school}'"
     #print(query)
     df = pandas.read_sql_query(query, con=engine)
@@ -67,7 +68,7 @@ def get_school_roster_raw(school: str, is_refresh: bool):
             logger.debug(f"\tcreating folder path {dir_path}")
             os.makedirs(dir_path)
 
-        data_src_util.download_file(url, file_path)
+        data_source.download_file(url, file_path)
 
     with open(file_path, 'r') as file:
         file_data = file.read()
@@ -86,7 +87,7 @@ def get_school_list_raw(is_refresh=False):
             logger.debug(f"\tcreating folder path {dir_path}")
             os.makedirs(dir_path)
 
-        data_src_util.download_file(url, file_path)
+        data_source.download_file(url, file_path)
 
     with open(file_path, 'r') as file:
         file_data = file.read()
@@ -124,24 +125,7 @@ def transform_school_list_raw(data_str):
     return schools_df
 
 
-def transform_roster_raw(data_str):
-    soup = BeautifulSoup(data_str, 'html.parser')
-    roster_html = soup.find(id="roster")
-    dfs = pandas.read_html(str(roster_html), flavor="bs4")
-    roster_df = dfs[0]
-    return roster_df
-
-
-#####################
-## Insert Functions
-#####################
-def insert_stg_schools(engine):
-    raw_data = get_school_list_raw(is_refresh=False)
-    schools_df = transform_school_list_raw(raw_data)
-    schools_df.to_sql(STG_SCHOOLS_TABLE_NAME, con=engine, if_exists='replace')
-
-
-def insert_stg_roster(engine, school_list=[]):
+def transform_roster_raw(data_str, school_name):
     summary_parse_regex = re.compile(r"([0-9\.]{3,}).*([0-9\.]{3,}).*([0-9\.]{3,}).*")
     name_parse_regex = re.compile(r"([a-zA-Z'\.]+) ([a-zA-Z'\. ]+)")
 
@@ -164,25 +148,43 @@ def insert_stg_roster(engine, school_list=[]):
 
         return first_name, last_name
 
+    soup = BeautifulSoup(data_str, 'html.parser')
+    roster_html = soup.find(id="roster")
+    dfs = pandas.read_html(str(roster_html), flavor="bs4")
+    roster_df = dfs[0]
+    roster_df["School"] = school_name
+    roster_df["PPG"], roster_df["RPG"], roster_df["APG"] = zip(*roster_df['Summary'].apply(lambda x: _parse_summary(x)))
+    roster_df = roster_df.drop("Summary", axis=1)
+
+    roster_df["First Name"], roster_df["Last Name"] = zip(*roster_df['Player'].apply(lambda x: _parse_name(x)))
+    roster_df = roster_df.drop("Player", axis=1)
+
+    return roster_df
+
+
+#####################
+## Insert Functions
+#####################
+def insert_stg_schools(engine):
+    raw_data = get_school_list_raw(is_refresh=False)
+    schools_df = transform_school_list_raw(raw_data)
+    schools_df.to_sql(STG_SCHOOLS_TABLE_NAME, con=engine, if_exists='replace')
+
+
+def insert_stg_roster(engine, school_list=[]):
+
     delete_table(engine, STG_ROSTER_TABLE_NAME)
 
     for school_name in school_list:
         file_data = get_school_roster_raw(school_name, is_refresh=False)
-        roster_df = transform_roster_raw(file_data)
-        roster_df["School"] = school_name
-        roster_df["PPG"], roster_df["RPG"], roster_df["APG"] = zip(*roster_df['Summary'].apply(lambda x: _parse_summary(x)))
-        roster_df = roster_df.drop("Summary", axis=1)
-
-        roster_df["First Name"], roster_df["Last Name"] = zip(*roster_df['Player'].apply(lambda x: _parse_name(x)))
-        roster_df = roster_df.drop("Player", axis=1)
-
+        roster_df = transform_roster_raw(file_data, school_name)
         logger.info(f"Inserting roster {school_name} into table {STG_ROSTER_TABLE_NAME}")
         roster_df.to_sql(STG_ROSTER_TABLE_NAME, con=engine, if_exists='append')
-
-
-if __name__ == '__main__':
-    engine = db_util.get_engine(DATABASE_NAME)
-    #insert_stg_schools(engine)
-    school_list = ['Duke', 'North Carolina']
-    insert_stg_roster(engine, school_list)
+#
+#
+# if __name__ == '__main__':
+#     engine = model.get_engine()
+#     #insert_stg_schools(engine)
+#     school_list = ['Duke', 'North Carolina']
+#     insert_stg_roster(engine, school_list)
 

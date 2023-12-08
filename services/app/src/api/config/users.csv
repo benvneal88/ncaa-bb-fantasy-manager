@@ -1,6 +1,0 @@
-first_name,last_name,user_name,email,team_ownership
-Ben,Neal,benneal,ben@email.com,'["Team Neal", "Team Ben"]'
-Collin,Danielson,collin,collin@gmail.com,'["Team Collin"]'
-John,Neal,john,john@email.com,'["Team Neal", "Team Ben"]'
-Kim,Horworth,kim,kim@email.com,'["Team Neal", "Team Ben"]'
-Ben,Neal,benneal,benneal@email.com,'["Team Kim", "K2"]'

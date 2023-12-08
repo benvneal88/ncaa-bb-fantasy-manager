@@ -8,3 +8,6 @@ Flask==2.2.2
 python-dotenv==0.21.0
 cryptography
 gunicorn==20.1.0
+Flask-SQLAlchemy
+SQLAlchemy-Utils
+html5lib

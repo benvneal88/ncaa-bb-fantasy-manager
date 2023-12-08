@@ -12,6 +12,21 @@ This project contains a webapp and database for managing ncaa basketball march m
 ### Running App in Production
     docker compose -f docker-compose.prod.yml up --build
 
+Getting Started:
+    services/app/src >
+
+    from api import model
+    model.init_database()
+
+    python3 api/transformations/populate_model.py
+
+Inspecting Database Tables:
+
+    select * from ncaa_fantasy.tbl_ball_team;
+    select * from ncaa_fantasy.tbl_fantasy_team;
+    select * from ncaa_fantasy.tbl_game;
+    select * from ncaa_fantasy.tbl_player;
+    select * from ncaa_fantasy.tbl_user;
 
 Troubleshooting:
 

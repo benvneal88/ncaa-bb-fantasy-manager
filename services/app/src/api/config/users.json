@@ -1,21 +1,26 @@
 {
-  "Ben Neal": {
-    "email": "ben_neal@gmail.com",
+  "ben_neal@gmail.com": {
+    "first_name": "ben",
+    "last_name": "neal",
     "is_active": 1,
     "team_ownership": ["Team Neal", "Team Ben"]
   },
-  "Collin Danielson": {
+  "collindanielson@gmail.com": {
+    "first_name": "collin",
+    "last_name": "danielson",
     "email": "collin@gmail.com",
     "is_active": 1,
     "team_ownership": ["Team Collin"]
   },
-  "John Neal": {
-    "email": "john_neal@gmail.com",
+  "JohnNeal@gmail.com": {
+    "first_name": "john",
+    "last_name": "neal",
     "is_active": 1,
     "team_ownership": ["Team Neal", "Team Ben"]
   },
-  "Kim Horworth": {
-    "email": "kim@gmail.com",
+  "KimHorworth@gmail.com": {
+    "first_name": "john",
+    "last_name": "neal",
     "is_active": 1,
     "team_ownership": ["Team Kim", "K2"]
   }
