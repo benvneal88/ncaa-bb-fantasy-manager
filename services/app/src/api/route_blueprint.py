@@ -68,8 +68,15 @@ def settings():
 ##  POST Endpoints  ##
 ######################
 
-@route_blueprint.route('/populate_model/', methods=['POST'])
-def populate_model():
+@route_blueprint.route('/refresh_player_stats/', methods=['POST'])
+def refresh_player_stats():
     # Add the code you want to execute on button push
-    populate.run(engine=model.get_engine())
+    populate.refresh_players_stats(engine=model.get_engine())
+    return "Model populated"
+
+
+@route_blueprint.route('/refresh_users_configuration/', methods=['POST'])
+def refresh_users_configuration():
+    # Add the code you want to execute on button push
+    populate.refresh_users_configuration(engine=model.get_engine())
     return "Model populated"

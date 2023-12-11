@@ -20,7 +20,6 @@ logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 def truncate_table(engine, table_name):
     message = f'deleting all rows from table {table_name}'
     logger.info(message)
-    model.write_to_console_logs(engine, message)
     # delete target table
     inspect = sqlalchemy.inspect(engine, table_name)
     if inspect.has_table(table_name, schema="ncaa_fantasy"):
@@ -211,30 +210,38 @@ def tbl_fantasy_team_user_mtm(engine):
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 
-def truncate_model(e):
-    truncate_table(e, "tbl_fantasy_team_user_mtm")
-    truncate_table(e, "tbl_user")
-    truncate_table(e, "tbl_fantasy_team")
-    truncate_table(e, "tbl_player")
-    truncate_table(e, "tbl_ball_team")
-
-
 def populate_table(engine, table_name):
     table_name(engine=engine)
 
 
-def run(engine):
-    model.init_database()
-    truncate_model(engine)
+def refresh_players_stats(engine):
+    refresh_schools = ["Arizona", "Duke", "North Carolina", "Northwestern"]
 
+    model.write_to_console_logs(engine, "Fetching and Updating player stats...")
+    truncate_table(engine, "tbl_player")
+    truncate_table(engine, "tbl_ball_team")
     sports_reference.insert_stg_schools(engine)
-    sports_reference.insert_stg_roster(engine, ['Duke', 'North Carolina'])
-
+    sports_reference.insert_stg_roster(engine, refresh_schools)
     populate_table(engine, tbl_ball_team)
     populate_table(engine, tbl_player)
+    model.write_to_console_logs(engine, "...completed")
+
+
+def refresh_users_configuration(engine):
+    model.write_to_console_logs(engine, "Refreshing Users configuration...")
+    truncate_table(engine, "tbl_fantasy_team_user_mtm")
+    truncate_table(engine, "tbl_user")
+    truncate_table(engine, "tbl_fantasy_team")
     populate_table(engine, tbl_user)
     populate_table(engine, tbl_fantasy_team)
     populate_table(engine, tbl_fantasy_team_user_mtm)
+    model.write_to_console_logs(engine, "...completed")
+
+
+def run(engine):
+    model.init_database()
+    refresh_players_stats(engine)
+    refresh_users_configuration(engine)
 
 
 if __name__ == '__main__':

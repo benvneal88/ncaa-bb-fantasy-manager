@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="settings">
-    <button id="runPopulateModel">Populate Model</button>
+    <button id="refresh_users_configuration">Refresh Users Configuration</button>
     <script>
-        document.getElementById('runPopulateModel').addEventListener('click', function () {
+        document.getElementById('refresh_users_configuration').addEventListener('click', function () {
             // Make an asynchronous request to the server to run the code
-            fetch('/populate_model', {
+            fetch('/refresh_users_configuration', {
+                method: 'POST',
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // Handle the response if needed
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    <button id="refresh_player_stats">Refresh Player Stats</button>
+    <script>
+        document.getElementById('refresh_player_stats').addEventListener('click', function () {
+            // Make an asynchronous request to the server to run the code
+            fetch('/refresh_player_stats', {
                 method: 'POST',
             })
             .then(response => response.text())

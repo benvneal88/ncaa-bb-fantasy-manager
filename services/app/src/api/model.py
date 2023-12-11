@@ -39,7 +39,7 @@ def validate_database():
         logger.info("Database Already Exists")
 
 
-def write_to_console_logs(engine, message):
+def write_to_console_logs(engine=get_engine(), message=None):
     df = pandas.DataFrame(columns=["message"]).from_records([{"message": message, "timestamp": datetime.utcnow()}])
     df.to_sql(con=engine, name="console_logs", index=False, if_exists="append")
 

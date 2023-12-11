@@ -48,7 +48,9 @@ def delete_table(engine, table_name):
 ## Extract Functions
 #####################
 def get_school_roster_raw(school: str, is_refresh: bool):
-    logger.info(f"Fetching roster for school {school}")
+    message = f"Fetching roster for school {school}"
+    logger.info(message)
+    model.write_to_console_logs(messag=message)
     object_type = 'rosters'
     school_file_name = school.lower().replace(" ", "")
     file_path = os.path.join(ROOT_DATA_PATH, object_type, "raw", f"{school_file_name}.html")
