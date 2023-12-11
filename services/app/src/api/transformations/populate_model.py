@@ -62,14 +62,20 @@ def seed_draft_events(engine):
             logger.info(f"with the {count} pick, the team {fantasy_team_name} picks player {player_name}")
             count = + 1
 
+
+def get_tournament_teams():
+    with open('api/config/tournament_teams.json', 'r') as f:
+        config = json.load(f)
+    return config
+
+
 ######
 # Table Inserting Functions
 ######
 def tbl_ball_team(engine):
     table_name = 'tbl_ball_team'
     logger.info(f"Starting '{table_name}' population")
-    with open('api/config/tournament_teams.json', 'r') as f:
-        config = json.load(f)
+    config = get_tournament_teams()
 
     insert_df = pandas.DataFrame(columns=['name', 'region', 'seed'])
 
@@ -215,7 +221,8 @@ def populate_table(engine, table_name):
 
 
 def refresh_players_stats(engine):
-    refresh_schools = ["Arizona", "Duke", "North Carolina", "Northwestern"]
+
+    refresh_schools = get_tournament_teams().keys()
 
     model.write_to_console_logs(engine, "Fetching and Updating player stats...")
     truncate_table(engine, "tbl_player")

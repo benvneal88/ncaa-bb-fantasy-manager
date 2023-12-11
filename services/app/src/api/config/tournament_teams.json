@@ -6,5 +6,13 @@
   "North Carolina": {
     "region": "east",
     "seed": 2
+  },
+  "Arizona": {
+    "region": "east",
+    "seed": 4
+  },
+  "Northwestern": {
+    "region": "east",
+    "seed": 3
   }
 }

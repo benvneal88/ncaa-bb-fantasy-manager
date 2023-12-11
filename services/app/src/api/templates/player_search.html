@@ -12,16 +12,18 @@
         new gridjs.Grid({
           columns: [
             { id: 'team_name', name: 'Team Name'},
-            { id: 'first_name', name: 'First Name' },
-            { id: 'last_name', name: 'Last Name'},
+            { id: 'region', name: 'Region'},
+            { id: 'seed', name: 'Seed'},
+            { id: 'name', name: 'Name'},
             { id: 'ppg', name: 'PPG'},
           ],
           data: [
             {% for player in players %}
               {
                 team_name: '{{ player.ball_team_name }}',
-                first_name: '{{ player.first_name }}',
-                last_name: '{{ player.last_name }}',
+                region: '{{ player.region }}',
+                seed: '{{ player.seed }}',
+                name: '{{ player.name }}',
                 ppg: {{ player.ppg }},
               },
             {% endfor %}

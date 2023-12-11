@@ -30,7 +30,7 @@ def draft_night():
 def player_search():
     e = model.get_engine()
     players = pd.read_sql_query("""
-        select t.name as ball_team_name, p.first_name, p.last_name, p.ppg
+        select t.name as ball_team_name, t.seed, t.region, CONCAT(p.first_name, ' ', p.last_name) as name, p.ppg
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
         """
