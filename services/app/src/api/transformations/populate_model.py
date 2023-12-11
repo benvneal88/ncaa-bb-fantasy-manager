@@ -2,9 +2,11 @@ import os
 import sys
 import json
 import pandas
+import sqlalchemy
 
 from api.utils import logger as log_util
 from api import model
+from api.transformations import sports_reference
 
 LOGGER_NAME = 'populdate_model'
 LOG_LEVEL = 'INFO'
@@ -17,8 +19,10 @@ logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 def truncate_table(engine, table_name):
     logger.info(f'deleting all rows from table {table_name}')
     # delete target table
-    with engine.connect() as connection:
-        connection.execute(f"delete from {table_name} where 1=1")
+    inspect = sqlalchemy.inspect(engine, table_name)
+    if inspect.has_table(table_name, schema="ncaa_fantasy"):
+        with engine.connect() as connection:
+            connection.execute(f"delete from {table_name} where 1=1")
 
 
 def seed_draft_events(engine):
@@ -91,7 +95,7 @@ def tbl_player(engine):
     """
     table_name = 'tbl_player'
     logger.info(f"Starting '{table_name}' population")
-    insert_df = pandas.read_sql_query(f'select id, name from tbl_ball_team', con=e)
+    insert_df = pandas.read_sql_query(f'select id, name from tbl_ball_team', con=engine)
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
     logger.info(insert_df)
@@ -212,20 +216,24 @@ def truncate_model(e):
     truncate_table(e, "tbl_ball_team")
 
 
-def populate_model(engine, table_name):
+def populate_table(engine, table_name):
     table_name(engine=engine)
 
 
+def run(engine):
+    model.init_database()
+    truncate_model(engine)
+
+    sports_reference.insert_stg_schools(engine)
+    sports_reference.insert_stg_roster(engine, ['Duke', 'North Carolina'])
+
+    populate_table(engine, tbl_ball_team)
+    populate_table(engine, tbl_player)
+    populate_table(engine, tbl_user)
+    populate_table(engine, tbl_fantasy_team)
+    populate_table(engine, tbl_fantasy_team_user_mtm)
+
+
 if __name__ == '__main__':
-    from api.transformations import sports_reference
     e = model.get_engine()
-    truncate_model(e)
-
-    sports_reference.insert_stg_schools(e)
-    sports_reference.insert_stg_roster(e, ['Duke', 'North Carolina'])
-
-    populate_model(e, tbl_ball_team)
-    populate_model(e, tbl_player)
-    populate_model(e, tbl_user)
-    populate_model(e, tbl_fantasy_team)
-    populate_model(e, tbl_fantasy_team_user_mtm)
+    run(e)

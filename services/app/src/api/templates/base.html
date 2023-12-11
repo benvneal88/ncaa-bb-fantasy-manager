@@ -3,8 +3,24 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      table {
+          border-collapse: collapse;
+          width: 100%;
+      }
 
+      th, td {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+      }
+
+      th {
+          background-color: #f2f2f2;
+      }
+    </style>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -18,7 +34,7 @@
         <strong><nav>
 <!--          <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('route_blueprint.home') }}';">Home</button>-->
 <!--          <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('route_blueprint.bracket') }}';">Bracket</button>-->
-<!--          <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('route_blueprint.scoreboard') }}';">Scoreboard</button>-->
+<!--          <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('route_blueprint.leaderboard') }}';">leaderboard</button>-->
 <!--          <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('route_blueprint.teams') }}';">Teams</button>-->
 <!--         -->
            <ul class="nav">
@@ -26,13 +42,22 @@
               <a class="nav-link active" aria-current="page" href="{{ url_for('route_blueprint.home') }}">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('route_blueprint.draft_night') }}">Draft Night</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('route_blueprint.player_search') }}">Player Search</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ url_for('route_blueprint.bracket') }}">Bracket</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('route_blueprint.scoreboard') }}">Scoreboard</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.leaderboard') }}">Leaderboard</a>
             </li>
            <li class="nav-item">
               <a class="nav-link" href="{{ url_for('route_blueprint.teams') }}">Teams</a>
+            </li>
+           <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('route_blueprint.settings') }}">⚙️</a>
             </li>
           </ul>
 
