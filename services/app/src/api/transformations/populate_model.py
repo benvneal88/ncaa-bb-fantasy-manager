@@ -8,16 +8,19 @@ from api.utils import logger as log_util
 from api import model
 from api.transformations import sports_reference
 
-LOGGER_NAME = 'populdate_model'
+LOGGER_NAME = 'populate_model'
 LOG_LEVEL = 'INFO'
 
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
+
 
 ######
 # Helper Functions
 ######
 def truncate_table(engine, table_name):
-    logger.info(f'deleting all rows from table {table_name}')
+    message = f'deleting all rows from table {table_name}'
+    logger.info(message)
+    model.write_to_console_logs(engine, message)
     # delete target table
     inspect = sqlalchemy.inspect(engine, table_name)
     if inspect.has_table(table_name, schema="ncaa_fantasy"):
@@ -82,7 +85,7 @@ def tbl_ball_team(engine):
         insert_df = pandas.concat([insert_df, df])
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
-    logger.info(insert_df)
+    logger.debug(insert_df)
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 
@@ -98,7 +101,7 @@ def tbl_player(engine):
     insert_df = pandas.read_sql_query(f'select id, name from tbl_ball_team', con=engine)
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
-    logger.info(insert_df)
+    logger.debug(insert_df)
 
     for index, row in insert_df.iterrows():
         insert_query = f"INSERT INTO {table_name} (first_name, last_name, ppg, fk_ball_team_id) SELECT `First Name`,`Last Name`, CAST(PPG as FLOAT), {row['id']} FROM stg_sportsref_roster where School = '{row['name']}'"
@@ -127,7 +130,7 @@ def tbl_user(engine):
         insert_df = pandas.concat([insert_df, df])
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
-    logger.info(insert_df)
+    logger.debug(insert_df)
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 
@@ -151,7 +154,7 @@ def tbl_fantasy_team(engine):
         insert_df = pandas.concat([insert_df, df])
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
-    logger.info(insert_df)
+    logger.debug(insert_df)
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 
@@ -204,7 +207,7 @@ def tbl_fantasy_team_user_mtm(engine):
             logger.error(f"Failed to find player by the name of {this_user_config} in users.json")
 
     logger.info(f'inserting {len(insert_df)} rows into table {table_name}...')
-    logger.info(insert_df)
+    logger.debug(insert_df)
     insert_df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
 

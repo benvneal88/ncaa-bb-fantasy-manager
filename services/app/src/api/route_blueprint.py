@@ -1,4 +1,5 @@
 import pandas
+import pandas as pd
 from flask import Blueprint
 from flask import Flask, Response, jsonify, request, render_template
 
@@ -27,7 +28,15 @@ def draft_night():
 
 @route_blueprint.route('/player_search/')
 def player_search():
-    return render_template('player_search.html')
+    e = model.get_engine()
+    players = pd.read_sql_query("""
+        select t.name as ball_team_name, p.first_name, p.last_name, p.ppg
+        from tbl_player p
+            inner join tbl_ball_team t on p.fk_ball_team_id = t.id
+        """
+    , con=e).to_dict("records")
+    #print(players)
+    return render_template('player_search.html', players=players)
 
 
 @route_blueprint.route('/bracket/')
@@ -40,11 +49,6 @@ def leaderboard():
     return render_template('leaderboard.html')
 
 
-# @route_blueprint.route('/teams/')
-# def teams():
-#     engine = model.get_engine()
-#     df = pandas.read_sql_query(f"select name, display_name, draft_order from tbl_fantasy_team", con=engine)
-#     return render_template('teams.html', tables=[df.to_html(classes='data')], titles=df.columns.values)
 @route_blueprint.route('/teams/')
 def teams():
     return render_template('teams.html')
@@ -52,7 +56,12 @@ def teams():
 
 @route_blueprint.route('/settings/')
 def settings():
-    return render_template('settings.html')
+    e = model.get_engine()
+    messages = pd.read_sql_query("""
+        select timestamp, message from console_logs order by timestamp desc
+        """
+        , con=e).to_dict("records")
+    return render_template('settings.html', messages=messages)
 
 
 ######################

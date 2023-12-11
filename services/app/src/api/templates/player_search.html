@@ -1,9 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="player_search">
-    <h3>Player Search</h3>
     <body>
-
+      <div>
+        <h3>Player Search</h3>
+        <hr>
+        <div id="players"></div>
+      </div>
+      <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+      <script>
+        new gridjs.Grid({
+          columns: [
+            { id: 'team_name', name: 'Team Name'},
+            { id: 'first_name', name: 'First Name' },
+            { id: 'last_name', name: 'Last Name'},
+            { id: 'ppg', name: 'PPG'},
+          ],
+          data: [
+            {% for player in players %}
+              {
+                team_name: '{{ player.ball_team_name }}',
+                first_name: '{{ player.first_name }}',
+                last_name: '{{ player.last_name }}',
+                ppg: {{ player.ppg }},
+              },
+            {% endfor %}
+          ],
+          search: {
+            selector: (cell, rowIndex, cellIndex) => [0, 1, 4].includes(cellIndex) ? cell : null,
+          },
+          sort: true,
+          pagination: true,
+        }).render(document.getElementById('players'));
+      </script>
     </body>
   </div>
 {% endblock %}

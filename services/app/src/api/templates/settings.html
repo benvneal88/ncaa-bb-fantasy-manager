@@ -16,5 +16,29 @@
             .catch(error => console.error('Error:', error));
         });
     </script>
+    <div>
+      <h3>Console</h3>
+      <hr>
+      <div id="console"></div>
+    </div>
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+      new gridjs.Grid({
+        columns: [
+          { id: 'timestamp', name: 'timestamp'},
+          { id: 'message', name: 'message' },
+        ],
+        data: [
+          {% for message in messages %}
+            {
+              timestamp: '{{ message.timestamp }}',
+              message: '{{ message.message }}',
+            },
+          {% endfor %}
+        ],
+        sort: false,
+        pagination: true,
+      }).render(document.getElementById('console'));
+    </script>
   </div>
 {% endblock %}

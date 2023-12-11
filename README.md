@@ -3,8 +3,9 @@
 This project contains a webapp and database for managing ncaa basketball march madness fantasy.
 
 ### Developing App Locally
+    export $(grep -v '^#' .env | xargs)
     cd services/app/src
-    flask --debug run 
+    flask --debug run --port 5001
 
 ### Running Web App Locally
     docker compose -f docker-compose.dev.yml up --build

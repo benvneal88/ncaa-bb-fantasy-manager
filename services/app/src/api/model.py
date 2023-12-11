@@ -1,5 +1,7 @@
 import os
 from datetime import datetime
+
+import pandas
 from sqlalchemy import MetaData, ForeignKey, Date, DateTime, Table, Column, Integer, String, Numeric, Boolean, Identity, UniqueConstraint
 import sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -36,6 +38,19 @@ def validate_database():
     else:
         logger.info("Database Already Exists")
 
+
+def write_to_console_logs(engine, message):
+    df = pandas.DataFrame(columns=["message"]).from_records([{"message": message, "timestamp": datetime.utcnow()}])
+    df.to_sql(con=engine, name="console_logs", index=False, if_exists="append")
+
+
+console_logs = Table(
+    "console_logs",
+    metadata_obj,
+    Column("id", Integer, Identity(start=0, cycle=True), primary_key=True),
+    Column("timestamp", DateTime, nullable=False),
+    Column("message", String(1024), nullable=True),
+)
 
 tbl_ball_team = Table(
     "tbl_ball_team",
