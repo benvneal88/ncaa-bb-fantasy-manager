@@ -25,6 +25,7 @@ jobs:
     - name: Build and push Image
       env:
         IMAGE_NAME: webserver
+        USER_NAME: benvneal88
       run: |
-        docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:latest -f service/app/Dockerfile .
-        docker push $DOCKER_REGISTRY/$IMAGE_NAME:latest
+        docker build -t $DOCKER_REGISTRY/$USER_NAME/$IMAGE_NAME:latest -f service/app/Dockerfile .
+        docker push $DOCKER_REGISTRY/$USER_NAME/$IMAGE_NAME:latest
