@@ -10,7 +10,10 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
-
+    
+    env:
+      PROJECT_REGISTRY_PATH: "ghcr.io/benvneal88/ncaa-bb-fantasy-manager"
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -22,10 +25,16 @@ jobs:
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
   
-    - name: Push Image
+    - name: Build & Push App Image
       env:
-        IMAGE_NAME: webserver
-        USER_NAME: benvneal88
+        IMAGE_NAME: app
       run: |
-        docker build -f services/app/Dockerfile services/app/ -t ghcr.io/$USER_NAME/$IMAGE_NAME:latest 
-        docker push ghcr.io/$USER_NAME/$IMAGE_NAME:latest
+        docker build -f services/app/Dockerfile services/app/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
+        docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
+    
+    - name: Build & Push Rerverse Proxy Image
+      env:
+        IMAGE_NAME: reverse-proxy
+      run: |
+        docker build -f services/app/Dockerfile services/nginix/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
+        docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
