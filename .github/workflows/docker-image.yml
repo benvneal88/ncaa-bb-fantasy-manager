@@ -27,5 +27,5 @@ jobs:
         IMAGE_NAME: webserver
         USER_NAME: benvneal88
       run: |
-        docker build -f service/app/Dockerfile . -t ghcr.io/$USER_NAME/$IMAGE_NAME:latest 
+        docker build -f services/app/Dockerfile . -t ghcr.io/$USER_NAME/$IMAGE_NAME:latest 
         docker push ghcr.io/$USER_NAME/$IMAGE_NAME:latest
