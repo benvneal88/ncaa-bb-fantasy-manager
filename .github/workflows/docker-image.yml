@@ -36,5 +36,5 @@ jobs:
       env:
         IMAGE_NAME: reverse-proxy
       run: |
-        docker build -f services/app/Dockerfile services/nginix/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
+        docker build -f services/app/Dockerfile services/nginx/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
         docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
