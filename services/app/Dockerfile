@@ -5,7 +5,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 COPY src/ src/
-RUN ["chmod", "+x", "/src/init.sh"]
+#RUN ["chmod", "+x", "/src/init.sh"]
 
 WORKDIR /src
 
@@ -18,4 +18,4 @@ RUN useradd app_runner
 USER app_runner
 
 EXPOSE 8080
-ENTRYPOINT ["/src/init.sh"]
+#ENTRYPOINT ["/src/init.sh"]

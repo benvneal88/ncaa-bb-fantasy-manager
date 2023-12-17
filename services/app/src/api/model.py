@@ -12,8 +12,6 @@ import api.utils.logger as log_util
 logger = log_util.get_logger(__name__, 'INFO')
 
 APP_DATABASE_NAME = 'ncaa_fantasy'
-STAGING_DATABASE_NAME = 'staging'
-
 
 db = SQLAlchemy()
 
@@ -26,12 +24,15 @@ def get_engine(database_name=APP_DATABASE_NAME):
 
 
 def init_database(engine=get_engine(), db: SQLAlchemy() = metadata_obj):
-    validate_database()
+    initialize_db()
+    logger.info(f"Creating tables...")
     db.create_all(bind=engine)
+    logger.info(f"Created tables")
 
 
-def validate_database():
+def initialize_db():
     engine = get_engine()
+    logger.info(f"Creating databases as needed")
     if not database_exists(engine.url):
         create_database(engine.url)
         logger.info("Database created: " + database_exists(engine.url))
