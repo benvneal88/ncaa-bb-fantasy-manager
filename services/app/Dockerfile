@@ -15,4 +15,4 @@ RUN useradd app_runner
 USER app_runner
 
 EXPOSE 8080
-ENTRYPOINT ["python3", "api/transformations/populate_model.py"]
+ENTRYPOINT ["python3", "init_db.py"]

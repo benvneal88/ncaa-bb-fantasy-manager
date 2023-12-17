@@ -244,7 +244,7 @@ def refresh_users_configuration(engine):
 
 
 def run(engine):
-    model.init_database()
+    #model.init_database()
     refresh_players_stats(engine)
     refresh_users_configuration(engine)
 

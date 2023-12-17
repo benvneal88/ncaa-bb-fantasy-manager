@@ -64,9 +64,9 @@ def settings():
     return render_template('settings.html', messages=messages)
 
 
-######################
-##  POST Endpoints  ##
-######################
+####################
+#  POST Endpoints  #
+####################
 
 @route_blueprint.route('/refresh_player_stats/', methods=['POST'])
 def refresh_player_stats():
