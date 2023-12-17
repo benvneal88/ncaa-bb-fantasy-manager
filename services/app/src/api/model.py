@@ -34,9 +34,9 @@ def validate_database():
     engine = get_engine()
     if not database_exists(engine.url):
         create_database(engine.url)
-        logger.info("New Database Created: " + database_exists(engine.url))
+        logger.info("Database created: " + database_exists(engine.url))
     else:
-        logger.info("Database Already Exists")
+        logger.info(f"Database {engine.url.database} already exists")
 
 
 def write_to_console_logs(engine=get_engine(), message=None):
