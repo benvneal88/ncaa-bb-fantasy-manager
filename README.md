@@ -13,6 +13,7 @@ This project contains a webapp and database for managing ncaa basketball march m
 
 ### Running App in Production
     docker compose -f docker-compose.prod.yml up --build
+    docker compose -f docker-compose.prod.yml  down
 
 Getting Started:
     services/app/src >

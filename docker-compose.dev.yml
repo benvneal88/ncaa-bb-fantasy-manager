@@ -14,7 +14,7 @@ services:
     ports:
       - "32000:3306"
     env_file:
-      - .env.db.dev
+      - .env.db
     volumes:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 

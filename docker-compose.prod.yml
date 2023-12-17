@@ -7,14 +7,14 @@ services:
     ports:
       - 8080:8080
     env_file:
-      - .env.prod
+      - .env
 
   db:
     build: ./services/db/
     ports:
       - "32000:3306"
     env_file:
-      - .env.db.prod
+      - .env.db
     volumes:
       - ./services/db:/docker-entrypoint-initdb.d/:ro
 
