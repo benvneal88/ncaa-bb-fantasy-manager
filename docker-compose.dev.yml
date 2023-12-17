@@ -10,7 +10,7 @@ services:
       - .env.dev
 
   db:
-    image: mysql:8.0
+    build: ./services/db/
     ports:
       - "32000:3306"
     env_file:
