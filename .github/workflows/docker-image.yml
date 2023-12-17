@@ -32,9 +32,16 @@ jobs:
         docker build -f services/app/Dockerfile services/app/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
         docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
     
-    - name: Build & Push Rerverse Proxy Image
+    - name: Build & Push Reverse Proxy Image
       env:
         IMAGE_NAME: reverse-proxy
       run: |
         docker build -f services/nginx/Dockerfile services/nginx/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
+        docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
+
+    - name: Build & Push DB Image
+      env:
+        IMAGE_NAME: db
+      run: |
+        docker build -f services/db/Dockerfile services/db/ -t $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest 
         docker push $PROJECT_REGISTRY_PATH/$IMAGE_NAME:latest
