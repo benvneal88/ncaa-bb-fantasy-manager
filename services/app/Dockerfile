@@ -17,7 +17,7 @@ RUN useradd app_runner
 
 # allow service user to rwd into the data sufolder
 RUN chown -R app_runner:app_runner /src/api/data
-RUN chmod -R u=rwdX,go=rX /src/api/data
+RUN chmod -R u=rwdx,go=r /src/api/data
 
 USER app_runner
 
