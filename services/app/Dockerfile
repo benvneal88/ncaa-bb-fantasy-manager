@@ -9,13 +9,16 @@ COPY src/ src/
 
 WORKDIR /src
 
-
 RUN pip install --upgrade pip
 RUN pip install -U pip && pip install -r requirements.txt
 #RUN pip install -e
 
 RUN useradd app_runner
+
+# allow service user to rwd into the data sufolder
+RUN chown -R app_runner:app_runner /src/api/data
+RUN chmod -R u=rwdX,go=rX /src/api/data
+
 USER app_runner
 
 EXPOSE 8080
-#ENTRYPOINT ["/src/init.sh"]
