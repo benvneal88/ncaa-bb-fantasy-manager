@@ -1,11 +1,18 @@
+import os
 import requests
 
 import api.utils.logger as log_util
 
+logger = log_util.get_logger("ingest")
+
 
 def download_file(url, file_path):
-    logger = log_util.get_logger("data_source")
     logger.info(f"Downloading from {url} to file {file_path}")
+
+    dir_path = os.path.dirname(file_path)
+    if not os.path.exists(dir_path):
+        logger.debug(f"\tcreating folder path {dir_path}")
+        os.makedirs(dir_path)
 
     try:
         response = requests.get(url)

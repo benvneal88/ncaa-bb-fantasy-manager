@@ -10,8 +10,9 @@ def create_app(config=None):
     #     app.config.from_object(Default)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = model.get_engine().url
+    db_engine = model.get_engine()
     model.db.init_app(app)
-    model.init_database()
+    model.init_database(engine=db_engine)
 
     from api.route_blueprint import route_blueprint
     app.register_blueprint(route_blueprint)
