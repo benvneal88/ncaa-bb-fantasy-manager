@@ -16,10 +16,11 @@ This project contains a webapp and database for managing ncaa basketball march m
     docker compose -f docker-compose.prod.yml  down
 
 Getting Started:
-    services/app/src >
+    cd services/app/src
 
     from api import model
-    model.init_database()
+    db_engine = model.get_engine()
+    model.init_database(db_engine)
 
     python3 api/transformations/populate_model.py
 

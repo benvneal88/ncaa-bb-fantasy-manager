@@ -2,7 +2,7 @@ import os
 import pandas
 import re
 from bs4 import BeautifulSoup
-#sys.path.append(os.getcwd())
+import time
 from api.utils import logger as log_util
 from api import model
 from api.utils import ingest
@@ -12,19 +12,14 @@ LOG_LEVEL = 'INFO'
 ROOT_URL = 'https://www.sports-reference.com'
 YEAR = '2023'
 
-DATA_SOURCE = 'sportsref'
-
-ROOT_DATA_PATH = os.path.join(os.getcwd(), "api", "data", DATA_SOURCE)
+CONSTANTS_DICT = model.get_model_constants(data_source='sportsref')
 
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 
 
-#####################
-## Helper Functions
-#####################
-def get_roster_url(school):
+def get_roster_url(school, table_name):
     engine = model.get_engine()
-    query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {model.STG_SCHOOLS_TABLE_NAME} where School = '{school}'"
+    query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {table_name} where School = '{school}'"
     #print(query)
     df = pandas.read_sql_query(query, con=engine)
 
@@ -34,9 +29,6 @@ def get_roster_url(school):
     return df.loc[0]['url']
 
 
-######################
-## Ingest Functions ##
-######################
 def get_school_roster_raw(engine, school: str, is_refresh: bool):
     """Fetches roster for school from data source
 
@@ -44,12 +36,12 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
     school (str) : the name of the school to fetch
     is_refresh (bool) : fetch from web even if data is available locally
     """
-    message = f"Fetching roster for school {school}"
+    message = f"Fetching roster for school '{school}'"
     logger.info(message)
     model.write_to_console_logs(engine=engine, message=message)
     object_type = 'rosters'
-    school_file_name = school.lower().replace(" ", "")
-    file_path = os.path.join(ROOT_DATA_PATH, object_type, "raw", f"{school_file_name}.html")
+    root_path = CONSTANTS_DICT["root_data_path"]
+    file_path = os.path.join(root_path, object_type, "raw", f"{school}.html")
 
     # download the object to raw (local) if it doesn't exist
     if not os.path.exists(file_path):
@@ -58,10 +50,11 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
 
     # download file if needed
     if is_refresh:
-        url = get_roster_url(school)
+        url = get_roster_url(school, CONSTANTS_DICT["stg_schools_table_name"])
         if url is None:
             logger.error(f"No roster url found for school {school}")
         else:
+            time.sleep(1)
             ingest.download_file(url, file_path)
 
     with open(file_path, 'r') as file:
@@ -73,12 +66,13 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
 def get_school_list_raw(is_refresh=False):
     """"""
     object_type = 'school_list'
-    url = f'{ROOT_URL}/cbb/schools/'
-    file_path = os.path.join(ROOT_DATA_PATH, object_type, "raw", "schools.html")
+    web_url = f'{ROOT_URL}/cbb/schools/'
+    root_path = CONSTANTS_DICT["root_data_path"]
+    file_path = os.path.join(root_path, object_type, "raw", "schools.html")
 
     # download file if needed
     if is_refresh:
-        ingest.download_file(url, file_path)
+        ingest.download_file(web_url, file_path)
 
     with open(file_path, 'r') as file:
         file_data = file.read()
@@ -86,9 +80,6 @@ def get_school_list_raw(is_refresh=False):
     return file_data
 
 
-#####################
-## Transform Functions
-#####################
 def transform_school_list_raw(data_str):
     soup = BeautifulSoup(data_str, 'html.parser')
     school_html = soup.find(id="schools")
@@ -153,24 +144,26 @@ def transform_roster_raw(data_str, school_name):
     return roster_df
 
 
-#####################
-## Insert Functions
-#####################
 def insert_stg_schools(engine):
+    """Inserts list of schools into database"""
     file_data = get_school_list_raw(is_refresh=False)
     schools_df = transform_school_list_raw(file_data)
-    schools_df.to_sql(model.STG_SCHOOLS_TABLE_NAME, con=engine, if_exists='replace')
+    schools_df.to_sql(CONSTANTS_DICT["stg_schools_table_name"], con=engine, if_exists='replace')
 
 
 def insert_stg_roster(engine, school_list=[]):
+    """"""
     logger.info(f"Refreshing rosters from schools: {school_list}")
-    model.delete_table(engine, model.STG_ROSTER_TABLE_NAME)
+    stg_roster_table_name = CONSTANTS_DICT["stg_roster_table_name"]
+    model.delete_table(engine, stg_roster_table_name)
+
+    #fetch_from_web
 
     for school_name in school_list:
         file_data = get_school_roster_raw(engine, school_name, is_refresh=False)
         roster_df = transform_roster_raw(file_data, school_name)
-        logger.info(f"Inserting roster {school_name} into table {model.STG_ROSTER_TABLE_NAME}")
-        roster_df.to_sql(model.STG_ROSTER_TABLE_NAME, con=engine, if_exists='append')
+        logger.info(f"Inserting roster {school_name} into table {stg_roster_table_name}")
+        roster_df.to_sql(stg_roster_table_name, con=engine, if_exists='append')
 
 #
 # if __name__ == '__main__':

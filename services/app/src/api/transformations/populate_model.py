@@ -219,9 +219,7 @@ def populate_table(engine, table_name):
 
 
 def refresh_players_stats(engine):
-
     refresh_schools = get_tournament_teams().keys()
-
     model.write_to_console_logs(engine, "Fetching and Updating player stats...")
     truncate_table(engine, "tbl_player")
     truncate_table(engine, "tbl_ball_team")
@@ -246,7 +244,7 @@ def refresh_users_configuration(engine):
 def run(engine):
     #model.init_database()
     refresh_players_stats(engine)
-    refresh_users_configuration(engine)
+    #refresh_users_configuration(engine)
 
 
 if __name__ == '__main__':

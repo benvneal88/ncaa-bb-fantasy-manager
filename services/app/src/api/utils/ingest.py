@@ -8,7 +8,6 @@ logger = log_util.get_logger("ingest")
 
 def download_file(url, file_path):
     logger.info(f"Downloading from {url} to file {file_path}")
-
     dir_path = os.path.dirname(file_path)
     if not os.path.exists(dir_path):
         logger.debug(f"\tcreating folder path {dir_path}")
@@ -25,3 +24,5 @@ def download_file(url, file_path):
     with open(file_path, 'w') as file:
         file.write(response.content.decode("utf-8"))
 
+
+#def fetch_from_web(data_source, object_type, list=None):

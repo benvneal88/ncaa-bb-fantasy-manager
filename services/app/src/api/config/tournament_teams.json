@@ -14,5 +14,21 @@
   "Northwestern": {
     "region": "east",
     "seed": 3
+  },
+  "Memphis": {
+    "region": "east",
+    "seed": 5
+  },
+  "NC State": {
+    "region": "east",
+    "seed": 6
+  },
+  "Ohio State": {
+    "region": "east",
+    "seed": 7
+  },
+  "Michigan": {
+    "region": "east",
+    "seed": 8
   }
 }

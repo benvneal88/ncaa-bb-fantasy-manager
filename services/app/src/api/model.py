@@ -12,8 +12,15 @@ import api.utils.logger as log_util
 logger = log_util.get_logger(__name__, 'INFO')
 
 APP_DATABASE_NAME = 'ncaa_fantasy'
-STG_SCHOOLS_TABLE_NAME = 'stg_sportsref_schools'
-STG_ROSTER_TABLE_NAME = 'stg_sportsref_roster'
+
+
+def get_model_constants(data_source=None):
+    vars = {
+        "stg_schools_table_name": 'stg_sportsref_schools',
+        "stg_roster_table_name": 'stg_sportsref_roster',
+        "root_data_path": os.path.join(os.getcwd(), "api", "data", data_source),
+    }
+    return vars
 
 
 def get_model_metadata():
