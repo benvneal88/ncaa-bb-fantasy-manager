@@ -6,6 +6,8 @@ This project contains a webapp and database for managing ncaa basketball march m
     export $(grep -v '^#' .env | xargs)
     cd services/app/src
     flask --debug run --port 5001
+    # http://127.0.0.1:5001
+
 
 ### Running Web App Locally
     docker compose -f docker-compose.dev.yml up --build

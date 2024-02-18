@@ -12,7 +12,7 @@ import api.utils.logger as log_util
 logger = log_util.get_logger(__name__, 'INFO')
 
 APP_DATABASE_NAME = 'ncaa_fantasy'
-
+db = SQLAlchemy()
 
 def get_model_constants(data_source=None):
     vars = {
@@ -24,7 +24,6 @@ def get_model_constants(data_source=None):
 
 
 def get_model_metadata():
-    db = SQLAlchemy()
     metadata_obj = MetaData()
 
     console_logs = Table(
@@ -161,7 +160,8 @@ def initialize_database():
         logger.info(f"Database {engine.url.database} already exists")
 
 
-def write_to_console_logs(engine, message=None):
+def write_to_console_logs(engine, logger,  message=None):
+    logger.info(message)
     df = pandas.DataFrame(columns=["message"]).from_records([{"message": message, "timestamp": datetime.utcnow()}])
     df.to_sql(con=engine, name="console_logs", index=False, if_exists="append")
 

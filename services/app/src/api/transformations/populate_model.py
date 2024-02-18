@@ -220,25 +220,25 @@ def populate_table(engine, table_name):
 
 def refresh_players_stats(engine):
     refresh_schools = get_tournament_teams().keys()
-    model.write_to_console_logs(engine, "Fetching and Updating player stats...")
+    model.write_to_console_logs(engine, logger,  "Fetching and Updating roster stats...")
     truncate_table(engine, "tbl_player")
     truncate_table(engine, "tbl_ball_team")
     sports_reference.insert_stg_schools(engine)
     sports_reference.insert_stg_roster(engine, refresh_schools)
     populate_table(engine, tbl_ball_team)
     populate_table(engine, tbl_player)
-    model.write_to_console_logs(engine, "...completed")
+    model.write_to_console_logs(engine, logger,  "Refresh completed")
 
 
 def refresh_users_configuration(engine):
-    model.write_to_console_logs(engine, "Refreshing Users configuration...")
+    model.write_to_console_logs(engine, logger,  "Refreshing Users configuration...")
     truncate_table(engine, "tbl_fantasy_team_user_mtm")
     truncate_table(engine, "tbl_user")
     truncate_table(engine, "tbl_fantasy_team")
     populate_table(engine, tbl_user)
     populate_table(engine, tbl_fantasy_team)
     populate_table(engine, tbl_fantasy_team_user_mtm)
-    model.write_to_console_logs(engine, "...completed")
+    model.write_to_console_logs(engine, logger,  "Refresh Users Configuration completed")
 
 
 def run(engine):

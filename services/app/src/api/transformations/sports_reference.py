@@ -36,9 +36,9 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
     school (str) : the name of the school to fetch
     is_refresh (bool) : fetch from web even if data is available locally
     """
-    message = f"Fetching roster for school '{school}'"
+    message = f"Fetching roster for school {school}"
     logger.info(message)
-    model.write_to_console_logs(engine=engine, message=message)
+    model.write_to_console_logs(engine=engine, logger=logger, message=message)
     object_type = 'rosters'
     root_path = CONSTANTS_DICT["root_data_path"]
     file_path = os.path.join(root_path, object_type, "raw", f"{school}.html")

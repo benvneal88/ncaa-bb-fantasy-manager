@@ -11,27 +11,27 @@
       <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
     <title>NCAA FANTASY</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+      <h1>March Madness Fantasy Manager</h1>
   </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1 class="logo">March Madness Fantasy Manager</h1>
-        <strong>
-            <nav>
-                <div class="left-items">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('route_blueprint.home') }}">Home</a>
-                    <a class="nav-link" href="{{ url_for('route_blueprint.draft_night') }}">Draft Night</a>
-                    <a class="nav-link" href="{{ url_for('route_blueprint.player_search') }}">Player Search</a>
-                    <a class="nav-link" href="{{ url_for('route_blueprint.bracket') }}">Bracket</a>
-                    <a class="nav-link" href="{{ url_for('route_blueprint.leaderboard') }}">Leaderboard</a>
-                </div>
-                <div class="right-items">
-                    <a class="nav-link" href="{{ url_for('route_blueprint.settings') }}">⚙️</a>
-                </div>
-            </nav>
-        </strong>
-      </div>
+  <header>
+    <strong>
+        <nav>
+          <div class="left-items">
+              <a class="nav-link active" href="{{ url_for('route_blueprint.home') }}">Home</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.draft_night') }}">Draft Night</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.player_search') }}">Player Search</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.player_stats') }}">Player Stats</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.bracket') }}">Bracket</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.leaderboard') }}">Leaderboard</a>
+              <a class="nav-link" href="{{ url_for('route_blueprint.teams') }}">Teams</a>
+          </div>
+          <div class="right-items">
+              <a class="nav-link" href="{{ url_for('route_blueprint.settings') }}">⚙️</a>
+          </div>
+      </nav>
+    </strong>
     </header>
+  <body>
     <div class="container">
       {% block content %}
       {% endblock %}
