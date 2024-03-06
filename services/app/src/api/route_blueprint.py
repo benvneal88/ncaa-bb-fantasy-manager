@@ -29,15 +29,84 @@ def draft_night():
 @route_blueprint.route('/player_search/')
 def player_search():
     e = model.get_engine()
-    players = pd.read_sql_query("""
-        select t.name as ball_team_name, t.seed, t.region, CONCAT(p.first_name, ' ', p.last_name) as name, p.ppg
+    players = pd.read_sql_query(
+        """select t.name as ball_team_name, t.seed, t.region, CONCAT(p.first_name, ' ', p.last_name) as name, p.ppg
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
-        """
-    , con=e).to_dict("records")
+        """,
+        con=e
+    ).to_dict("records")
     #print(players)
     return render_template('player_search.html', players=players)
 
+
+@route_blueprint.route('/player_stats/')
+def player_stats():
+    e = model.get_engine()
+    player_stats_df = pd.read_sql_query("""select tbl.seed, tbl.region, tbl.title, GROUP_CONCAT(tbl.name ORDER BY tbl.ppg desc) AS name_list, GROUP_CONCAT(tbl.ppg ORDER BY tbl.ppg desc) AS ppg_list
+    from (
+        select
+            t.seed,
+            t.region,
+            CONCAT(t.seed, ' - ', t.region, ' - ', t.name) as title,
+            CONCAT(p.first_name, ' ', p.last_name) as name,
+            ROUND(p.ppg, 1) as ppg
+        from tbl_player p
+            inner join tbl_ball_team t on p.fk_ball_team_id = t.id
+        where p.ppg > 3
+        order by t.name desc
+    ) tbl
+    group by 1,2,3""",
+        con=e
+    )
+
+    #
+    # player_stats_df = pd.read_sql_query("""select seed, GROUP_CONCAT(title ORDER BY region desc) as titles, json_arrayagg(name_list) as name_list, json_arrayagg(ppg_list) as ppg_list
+    # from (
+    # 	select tbl.seed, tbl.region, tbl.title, GROUP_CONCAT(tbl.name ORDER BY tbl.ppg desc) AS name_list, GROUP_CONCAT(tbl.ppg ORDER BY tbl.ppg desc) AS ppg_list
+    # 	from (
+    # 		select
+    # 			t.seed,
+    # 			t.region,
+    # 			CONCAT(t.seed, ' - ', t.region, ' - ', t.name) as title,
+    # 			CONCAT(p.first_name, ' ', p.last_name) as name,
+    # 			ROUND(p.ppg, 1) as ppg
+    # 		from tbl_player p
+    # 			inner join tbl_ball_team t on p.fk_ball_team_id = t.id
+    # 		where p.ppg > 3
+    # 		order by t.name desc
+    # 	) tbl
+    # 	group by 1,2,3
+    # ) tbl2
+    # group by 1""", con=e)
+
+    import pdb;
+    # def zip_lists(row):
+    #     zipped_list = []
+    #     for item in list(zip(row['name_list'], row['ppg_list'])):
+    #         pdb.set_trace()
+    #         names = item[0].split(',')
+    #         ppgs = item[1].split(',')
+    #         nested_list = list(zip(names, ppgs))
+    #         zipped_list.append(nested_list)
+    #         pdb.set_trace()
+    #         #print(zipped_list)
+    #     return zipped_list
+
+    def zip_lists(row):
+        names = row["name_list"].split(',')
+        ppgs = row["ppg_list"].split(',')
+        zipped_list = list(zip(names, ppgs))
+        #print(zipped_list)
+        return zipped_list
+
+    #player_stats_df["titles"] = player_stats_df.apply(lambda x: x['titles'].split(','), axis=1)
+    player_stats_df["data"] = player_stats_df.apply(zip_lists, axis=1)
+    player_stats_df = player_stats_df.drop(['name_list', 'ppg_list'], axis=1)
+    player_stats_list = player_stats_df.to_dict("records")
+    print(player_stats_list)
+
+    return render_template('player_stats.html', player_stats_list=player_stats_list)
 
 @route_blueprint.route('/bracket/')
 def bracket():

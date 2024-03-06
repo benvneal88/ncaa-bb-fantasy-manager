@@ -4,31 +4,63 @@
     "seed": 1
   },
   "North Carolina": {
-    "region": "east",
-    "seed": 2
+    "region": "west",
+    "seed": 1
   },
   "Arizona": {
-    "region": "east",
-    "seed": 4
+    "region": "south",
+    "seed": 1
   },
   "Northwestern": {
-    "region": "east",
-    "seed": 3
+    "region": "midwest",
+    "seed": 1
   },
   "Memphis": {
     "region": "east",
-    "seed": 5
+    "seed": 2
   },
   "NC State": {
-    "region": "east",
-    "seed": 6
+    "region": "midwest",
+    "seed": 2
   },
   "Ohio State": {
-    "region": "east",
-    "seed": 7
+    "region": "west",
+    "seed": 2
   },
   "Michigan": {
+    "region": "south",
+    "seed": 2
+  },
+  "Alabama": {
     "region": "east",
-    "seed": 8
+    "seed": 3
+  },
+  "California": {
+    "region": "midwest",
+    "seed": 3
+  },
+  "Connecticut": {
+    "region": "west",
+    "seed": 3
+  },
+  "Gonzaga": {
+    "region": "south",
+    "seed": 3
+  },
+  "Indiana": {
+    "region": "east",
+    "seed": 4
+  },
+  "Kansas": {
+    "region": "midwest",
+    "seed": 4
+  },
+  "Texas": {
+    "region": "west",
+    "seed": 4
+  },
+  "Texas A&M": {
+    "region": "south",
+    "seed": 4
   }
 }

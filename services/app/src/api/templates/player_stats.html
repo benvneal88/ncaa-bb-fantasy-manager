@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        {% for team in player_stats_list %}
+        <div class="player-stats-section">
+            <h3>{{ team.title }}</h3>
+            <table>
+                <colgroup>
+                    <col style="width: 300px;">
+                    <col style="width: 100;">
+                </colgroup>
+                <tr>
+                    <th>Name</th>
+                    <th>PPG</th>
+                </tr>
+                {% for player in team.data %}
+                <tr>
+                    <td>{{ player[0] }}</td>
+                    <td>{{ player[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
