@@ -17,6 +17,7 @@ CONSTANTS_DICT = model.get_model_constants(data_source='sportsref')
 logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
 
 
+
 def get_roster_url(school, table_name):
     engine = model.get_engine()
     query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {table_name} where School = '{school}'"
@@ -41,7 +42,7 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
     model.write_to_console_logs(engine=engine, logger=logger, message=message)
     object_type = 'rosters'
     root_path = CONSTANTS_DICT["root_data_path"]
-    file_path = os.path.join(root_path, object_type, "raw", f"{school}.html")
+    file_path = os.path.join(root_path, object_type, f"{school}.html")
 
     # download the object to raw (local) if it doesn't exist
     if not os.path.exists(file_path):
@@ -63,12 +64,27 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
     return file_data
 
 
+def get_box_scores_raw(date):
+    object_type = 'box_scores'
+    web_url = f'{ROOT_URL}/cbb/boxscores/index.cgi?month=3&day=7&year=2024'
+    root_path = CONSTANTS_DICT["root_data_path"]
+    file_path = os.path.join(root_path, object_type, "schools.html")
+
+    # download file if needed
+    if is_refresh:
+        ingest.download_file(web_url, file_path)
+
+    with open(file_path, 'r') as file:
+        file_data = file.read()
+
+    return file_data
+
 def get_school_list_raw(is_refresh=False):
     """"""
     object_type = 'school_list'
     web_url = f'{ROOT_URL}/cbb/schools/'
     root_path = CONSTANTS_DICT["root_data_path"]
-    file_path = os.path.join(root_path, object_type, "raw", "schools.html")
+    file_path = os.path.join(root_path, object_type, "schools.html")
 
     # download file if needed
     if is_refresh:

@@ -28,11 +28,12 @@
               },
             {% endfor %}
           ],
-          search: {
-            selector: (cell, rowIndex, cellIndex) => [0, 1, 4].includes(cellIndex) ? cell : null,
-          },
+          search: true,
           sort: true,
-          pagination: true,
+            pagination: {
+              limit: 20,
+              summary: true
+            }
         }).render(document.getElementById('players'));
       </script>
     </body>
