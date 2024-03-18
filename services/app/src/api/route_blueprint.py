@@ -5,7 +5,7 @@ from flask import Flask, Response, jsonify, request, render_template
 
 from api import model
 from api.transformations import populate_model as populate
-
+import api.commons as commons
 
 route_blueprint = Blueprint('route_blueprint', __name__)
 
@@ -23,6 +23,7 @@ def get_player_stats(region, seed):
             t.name as team_name,
             CONCAT(p.first_name, ' ', p.last_name) as name,
             ROUND(p.ppg, 1) as ppg,
+            CONCAT('{commons.BACKEND_API_URL}/draft_player/', p.id) as draft_player,
             CASE WHEN drafted_round IS NULL THEN 0 ELSE 1 END as is_drafted
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
@@ -34,8 +35,8 @@ def get_player_stats(region, seed):
         con=e
     )
     #df.loc[df['is_drafted'] == 0, 'is_drafted'] = '🪖'
-    df.loc[df['is_drafted'] == 0, 'is_drafted'] = 'google.com'
-    df.loc[df['is_drafted'] == 1, 'is_drafted'] = '💼'
+    #df.loc[df['is_drafted'] == 0, 'is_drafted'] = 'google.com'
+    #df.loc[df['is_drafted'] == 1, 'is_drafted'] = '💼'
 
     return df
 
@@ -44,7 +45,6 @@ def get_team(team_name):
     e = model.get_engine()
     df = pd.read_sql_query(f"""
         select
-            t.name as team_name,
             CONCAT(p.first_name, ' ', p.last_name) as name,
             ROUND(p.ppg, 1) as ppg,
             CASE WHEN drafted_round IS NULL THEN 0 ELSE 1 END as is_drafted
@@ -68,6 +68,11 @@ def get_teams():
         con=e
     )
     return df
+
+
+def draft_player_update(player_id):
+    e = model.get_engine()
+    r = e.engine.execute(f"UPDATE tbl_player set drafted_round = 1 where id = {player_id}")
 
 
 @route_blueprint.route('/api/v1/teams/')
@@ -109,12 +114,10 @@ def player_stats(region, seed):
     return df.to_dict('records')
 
 
-@route_blueprint.route('/api/v1/draft_player/', methods=['POST'])
-def submit_draft_event(fantasy_team_id, player_id):
-    # Add the code you want to execute on button push
-    populate.refresh_players_stats(engine=model.get_engine())
-    return "Model populated"
-
+@route_blueprint.route('/api/v1/draft_player/<string:player_id>', methods=['GET'])
+def draft_player(player_id):
+    draft_player_update(player_id)
+    return f"drafted player {player_id}"
 
 
 ###

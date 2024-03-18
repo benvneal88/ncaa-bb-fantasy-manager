@@ -10,12 +10,12 @@ import api.utils.logger as log_util
 logger = log_util.get_logger(__name__, 'INFO')
 
 st.title("Player Stats")
-regions = ["East", "West", "MidWest", "South"]
+regions = ["East", "West", "Midwest", "South"]
 selected_page = st.radio("Select a region...", regions, horizontal=True)
 
 
 def get_player_stats_by_region_seed(region, seed, play_in_game=False):
-    df = commons.get_df_from_api(f"{commons.API_URL}/player_stats_by_seed_region/{region}/{seed}")
+    df = commons.get_df_from_api(f"{commons.BACKEND_API_URL}/player_stats_by_seed_region/{region}/{seed}")
     team_name = ""
     if not df.empty:
         if play_in_game:
@@ -28,7 +28,6 @@ def get_player_stats_by_region_seed(region, seed, play_in_game=False):
 
 
 def write_dataframes(region):
-
     first_round_matchups_dict = {
         "east": [(1, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)],
         "west": [(1, 16, 16), (2, 15), (3, 14), (4, 13), (5, 12), (6, 11), (7, 10), (8, 9)],
@@ -59,13 +58,12 @@ def write_dataframes(region):
                         columns=[
                             Column(name='name', label='Name'),
                             Column(name='ppg', label='PPG'),
-                            Column(name='is_drafted', label='Draft', dtype=ColumnDType.ICONBUTTON, icon='fa-solid fa-share-nodes'),
-                          #  Column(name='is_drafted', label='Is Drafted'),
+                            Column(name='draft_player', label='Draft', dtype=ColumnDType.ICONBUTTON, icon='fa-solid fa-share-nodes'),
+                            Column(name='is_drafted', label='Is Drafted'),
                         ],
                         show_search=False,
                         key=f"{str(row)}-{str(col_index)}"
                     )
-
                     #st.write(df, unsafe_allow_html=True)
 
 

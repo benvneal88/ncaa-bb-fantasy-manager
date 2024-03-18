@@ -12,7 +12,7 @@ st.title("Player Search")
 
 @st.cache_data
 def fetch_player_data():
-    url = f"{commons.API_URL}/players/"
+    url = f"{commons.BACKEND_API_URL}/players/"
     df = commons.get_df_from_api(url)
     return df
 
