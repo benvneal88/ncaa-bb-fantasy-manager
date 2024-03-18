@@ -16,6 +16,23 @@ CONSTANTS_DICT = model.get_model_constants(data_source='sportsref')
 logger = log_util.get_logger(__name__, LOG_LEVEL)
 
 
+def get_school_list_raw(is_refresh=False):
+    """"""
+    object_type = 'school_list'
+    web_url = f'{ROOT_URL}/cbb/schools/'
+    root_path = CONSTANTS_DICT["root_data_path"]
+    file_path = os.path.join(root_path, object_type, "schools.html")
+
+    # download file if needed
+    if is_refresh:
+        ingest.download_file(web_url, file_path)
+
+    with open(file_path, 'r') as file:
+        file_data = file.read()
+
+    return file_data
+
+
 def get_roster_url(school, table_name):
     engine = model.get_engine()
     query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {table_name} where School = '{school}'"
@@ -65,9 +82,10 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
 def get_box_scores_raw(date, is_refresh):
     object_type = 'box_scores'
     web_url = f'{ROOT_URL}/cbb/boxscores/index.cgi?month=3&day=7&year=2024'
-    u2 = "https://www.sports-reference.com/cbb/boxscores/2024-03-07-03-ucla.html"
+    #u2 = "https://www.sports-reference.com/cbb/boxscores/2024-03-07-03-ucla.html"
     root_path = CONSTANTS_DICT["root_data_path"]
-    file_path = os.path.join(root_path, object_type, "schools.html")
+    date_str = date #todo format
+    file_path = os.path.join(root_path, object_type, date_str, "scores_list.html")
 
     # download file if needed
     if is_refresh:
@@ -79,21 +97,20 @@ def get_box_scores_raw(date, is_refresh):
     return file_data
 
 
-def get_school_list_raw(is_refresh=False):
-    """"""
-    object_type = 'school_list'
-    web_url = f'{ROOT_URL}/cbb/schools/'
-    root_path = CONSTANTS_DICT["root_data_path"]
-    file_path = os.path.join(root_path, object_type, "schools.html")
+def transform_box_scores(data_str):
+    soup = BeautifulSoup(data_str, 'html.parser')
+    box_scores_list = soup.find_all(attrs={"class": "right gamelink"})
 
-    # download file if needed
-    if is_refresh:
-        ingest.download_file(web_url, file_path)
-
-    with open(file_path, 'r') as file:
-        file_data = file.read()
-
-    return file_data
+    box_scores = []
+    for box_score_html in box_scores_list:
+        soup = BeautifulSoup(str(box_score_html), 'html.parser')
+        box_score_url_html = soup.find(name="a")
+        matches = re.match(r'<a href="(.*)">F<.*</a>', str(box_score_url_html))
+        if matches[1] is None:
+            logger.error(f"Failed to find link for box score {box_score_url_html}")
+        else:
+            box_scores.append(matches[1])
+    return box_scores
 
 
 def transform_school_list_raw(data_str):
@@ -180,6 +197,17 @@ def insert_stg_roster(engine, school_list=[]):
         roster_df = transform_roster_raw(file_data, school_name)
         logger.info(f"Inserting roster {school_name} into table {stg_roster_table_name}")
         roster_df.to_sql(stg_roster_table_name, con=engine, if_exists='append')
+
+
+def insert_stg_box_scores(engine, date):
+    data = get_box_scores_raw(date=date, is_refresh=False)
+    box_score_urls = transform_box_scores(data)
+    box_scores = []
+    for box_score_url in box_score_urls:
+        box_scores.append({"date": date, "url": box_score_url})
+    df = pandas.DataFrame(box_scores)
+    df.to_sql(CONSTANTS_DICT["stg_box_scores_list_table_name"], con=engine, if_exists='append')
+
 
 #
 # if __name__ == '__main__':

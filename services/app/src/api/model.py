@@ -14,10 +14,12 @@ logger = log_util.get_logger(__name__, 'INFO')
 APP_DATABASE_NAME = 'ncaa_fantasy'
 db = SQLAlchemy()
 
+
 def get_model_constants(data_source=None):
     vars = {
         "stg_schools_table_name": 'stg_sportsref_schools',
         "stg_roster_table_name": 'stg_sportsref_roster',
+        "stg_box_scores_list_table_name": 'stg_sportsref_box_scores_list',
         "root_data_path": os.path.join(os.getcwd(), "api", "data", data_source),
     }
     return vars

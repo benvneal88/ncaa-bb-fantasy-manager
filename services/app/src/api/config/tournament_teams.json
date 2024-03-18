@@ -1,66 +1,66 @@
 {
   "Duke": {
-    "region": "east",
+    "region": "East",
     "seed": 1
   },
   "North Carolina": {
-    "region": "west",
+    "region": "West",
     "seed": 1
   },
   "Arizona": {
-    "region": "south",
+    "region": "South",
     "seed": 1
   },
-  "Northwestern": {
-    "region": "midwest",
+  "NorthWestern": {
+    "region": "Midwest",
     "seed": 1
   },
   "Memphis": {
-    "region": "east",
+    "region": "East",
     "seed": 2
   },
   "NC State": {
-    "region": "midwest",
+    "region": "Midwest",
     "seed": 2
   },
   "Ohio State": {
-    "region": "west",
+    "region": "West",
     "seed": 2
   },
   "Michigan": {
-    "region": "south",
+    "region": "South",
     "seed": 2
   },
   "Alabama": {
-    "region": "east",
+    "region": "East",
     "seed": 3
   },
   "California": {
-    "region": "midwest",
+    "region": "Midwest",
     "seed": 3
   },
   "Connecticut": {
-    "region": "west",
+    "region": "West",
     "seed": 3
   },
   "Gonzaga": {
-    "region": "south",
+    "region": "South",
     "seed": 3
   },
   "Indiana": {
-    "region": "east",
+    "region": "East",
     "seed": 4
   },
   "Kansas": {
-    "region": "midwest",
+    "region": "Midwest",
     "seed": 16
   },
   "Texas A&M": {
-    "region": "midwest",
+    "region": "Midwest",
     "seed": 16
   },
   "Texas": {
-    "region": "west",
+    "region": "West",
     "seed": 4
   },
 

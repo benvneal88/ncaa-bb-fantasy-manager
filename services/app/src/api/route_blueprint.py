@@ -16,6 +16,7 @@ route_blueprint = Blueprint('route_blueprint', __name__)
 #     return df
 #
 
+
 def get_player_stats(region, seed):
     e = model.get_engine()
     df = pd.read_sql_query(f"""
@@ -24,7 +25,7 @@ def get_player_stats(region, seed):
             CONCAT(p.first_name, ' ', p.last_name) as name,
             ROUND(p.ppg, 1) as ppg,
             CONCAT('{commons.BACKEND_API_URL}/draft_player/', p.id) as draft_player,
-            CASE WHEN drafted_round IS NULL THEN 0 ELSE 1 END as is_drafted
+            CASE WHEN drafted_round IS NULL THEN FALSE ELSE TRUE END as is_drafted
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
         where 
@@ -55,7 +56,6 @@ def get_team(team_name):
             AND p.ppg > 3""",
         con=e
     )
-    #print(df)
     return df
 
 
@@ -70,7 +70,7 @@ def get_teams():
     return df
 
 
-def draft_player_update(player_id):
+def update_draft_player(player_id):
     e = model.get_engine()
     r = e.engine.execute(f"UPDATE tbl_player set drafted_round = 1 where id = {player_id}")
 
@@ -87,24 +87,24 @@ def team(team_name):
     return df.to_dict("records")
 
 
-@route_blueprint.route('/api/v1/players/')
+@route_blueprint.route('/api/v1/players')
 def players():
     e = model.get_engine()
     df = pd.read_sql_query(
         """select 
-            t.name as Team, 
-            t.seed as Seed, 
-            t.region as Region, 
-            CONCAT(p.first_name, ' ', p.last_name) as Name, 
-            p.ppg as PPG
+            t.name as team, 
+            t.seed as seed, 
+            t.region as region, 
+            CONCAT(p.first_name, ' ', p.last_name) as name, 
+            p.ppg as ppg,
+            CASE WHEN drafted_round IS NULL THEN FALSE ELSE TRUE END as is_drafted
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
         """,
         con=e
     )
+    print(df)
     df = df.to_dict("records")
-    #print(players)
-    #template = render_template('player_search.html', players=players)
     return df
 
 
@@ -114,13 +114,19 @@ def player_stats(region, seed):
     return df.to_dict('records')
 
 
-@route_blueprint.route('/api/v1/draft_player/<string:player_id>', methods=['GET'])
+@route_blueprint.route('/api/v1/draft_player/<string:player_id>')
 def draft_player(player_id):
-    draft_player_update(player_id)
+    update_draft_player(player_id)
     return f"drafted player {player_id}"
 
 
-###
+@route_blueprint.route('/api/v1/logs')
+def logs():
+    e = model.get_engine()
+    # TODO date_format to yyyy-mm-dd HH.....
+    df = pd.read_sql_query("""select timestamp, message from console_logs order by timestamp desc""", con=e)
+    return df.to_dict('records')
+
 
 @route_blueprint.route('/draft_night/')
 def draft_night():
@@ -215,14 +221,6 @@ def leaderboard():
 #     return render_template('teams.html')
 #
 
-@route_blueprint.route('/settings/')
-def settings():
-    e = model.get_engine()
-    messages = pd.read_sql_query("""
-        select timestamp, message from console_logs order by timestamp desc
-        """
-        , con=e).to_dict("records")
-    return render_template('settings.html', messages=messages)
 
 
 ####################

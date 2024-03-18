@@ -1,8 +1,7 @@
 from awesome_table import AwesomeTable
+from awesome_table.column import (Column, ColumnDType)
 import src.api.commons as commons
 import streamlit as st
-
-from awesome_table.column import (Column, ColumnDType)
 
 
 import api.utils.logger as log_util
@@ -59,7 +58,7 @@ def write_dataframes(region):
                             Column(name='name', label='Name'),
                             Column(name='ppg', label='PPG'),
                             Column(name='draft_player', label='Draft', dtype=ColumnDType.ICONBUTTON, icon='fa-solid fa-share-nodes'),
-                            Column(name='is_drafted', label='Is Drafted'),
+                            Column(name='is_drafted', label='Drafted?'),
                         ],
                         show_search=False,
                         key=f"{str(row)}-{str(col_index)}"
