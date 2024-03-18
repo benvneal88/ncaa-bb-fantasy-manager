@@ -10,7 +10,7 @@ import src.api.commons as commons
 st.title("Player Search")
 
 
-@st.cache_data
+#@st.cache_data
 def fetch_player_data():
     url = f"{commons.BACKEND_API_URL}/players"
     df = commons.get_df_from_api(url)
@@ -19,11 +19,12 @@ def fetch_player_data():
 
 
 AwesomeTable(fetch_player_data(), columns=[
-    Column(name='team', label='Team'),
-    Column(name='region', label='Region'),
-    Column(name='name', label='Name'),
-    Column(name='ppg', label='PPG'),
-    Column(name='is_drafted', label='Drafted?'),
+    commons.get_front_end_column("team"),
+    commons.get_front_end_column("region"),
+    commons.get_front_end_column("player_name"),
+    commons.get_front_end_column("ppg"),
+    commons.get_front_end_column("draft_player"),
+    commons.get_front_end_column("is_drafted")
 ], show_search=True)
 
 

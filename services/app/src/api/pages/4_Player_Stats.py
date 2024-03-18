@@ -55,10 +55,10 @@ def write_dataframes(region):
                     AwesomeTable(
                         df,
                         columns=[
-                            Column(name='name', label='Name'),
-                            Column(name='ppg', label='PPG'),
-                            Column(name='draft_player', label='Draft', dtype=ColumnDType.ICONBUTTON, icon='fa-solid fa-share-nodes'),
-                            Column(name='is_drafted', label='Drafted?'),
+                            commons.get_front_end_column("player_name"),
+                            commons.get_front_end_column("ppg"),
+                            commons.get_front_end_column("draft_player"),
+                            commons.get_front_end_column("is_drafted")
                         ],
                         show_search=False,
                         key=f"{str(row)}-{str(col_index)}"

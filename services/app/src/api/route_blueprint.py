@@ -17,6 +17,25 @@ route_blueprint = Blueprint('route_blueprint', __name__)
 #
 
 
+def get_players():
+    e = model.get_engine()
+    df = pd.read_sql_query(
+        f"""select 
+            t.name as team, 
+            t.seed as seed, 
+            t.region as region, 
+            CONCAT(p.first_name, ' ', p.last_name) as name, 
+            p.ppg as ppg,
+            CONCAT('{commons.BACKEND_API_URL}/draft_player/', p.id) as draft_player,
+            CASE WHEN drafted_round IS NULL THEN FALSE ELSE TRUE END as is_drafted
+        from tbl_player p
+            inner join tbl_ball_team t on p.fk_ball_team_id = t.id
+        """,
+        con=e
+    )
+    return df
+
+
 def get_player_stats(region, seed):
     e = model.get_engine()
     df = pd.read_sql_query(f"""
@@ -48,6 +67,7 @@ def get_team(team_name):
         select
             CONCAT(p.first_name, ' ', p.last_name) as name,
             ROUND(p.ppg, 1) as ppg,
+            CONCAT('{commons.BACKEND_API_URL}/draft_player/', p.id) as draft_player,
             CASE WHEN drafted_round IS NULL THEN 0 ELSE 1 END as is_drafted
         from tbl_player p
             inner join tbl_ball_team t on p.fk_ball_team_id = t.id
@@ -89,21 +109,7 @@ def team(team_name):
 
 @route_blueprint.route('/api/v1/players')
 def players():
-    e = model.get_engine()
-    df = pd.read_sql_query(
-        """select 
-            t.name as team, 
-            t.seed as seed, 
-            t.region as region, 
-            CONCAT(p.first_name, ' ', p.last_name) as name, 
-            p.ppg as ppg,
-            CASE WHEN drafted_round IS NULL THEN FALSE ELSE TRUE END as is_drafted
-        from tbl_player p
-            inner join tbl_ball_team t on p.fk_ball_team_id = t.id
-        """,
-        con=e
-    )
-    print(df)
+    df = get_players()
     df = df.to_dict("records")
     return df
 
