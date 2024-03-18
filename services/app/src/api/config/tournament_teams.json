@@ -53,14 +53,15 @@
   },
   "Kansas": {
     "region": "midwest",
-    "seed": 4
+    "seed": 16
+  },
+  "Texas A&M": {
+    "region": "midwest",
+    "seed": 16
   },
   "Texas": {
     "region": "west",
     "seed": 4
   },
-  "Texas A&M": {
-    "region": "south",
-    "seed": 4
-  }
+
 }

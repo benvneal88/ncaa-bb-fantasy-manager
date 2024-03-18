@@ -149,7 +149,7 @@ def tbl_fantasy_team(engine):
     for name, value_dict in config.items():
         data_dict = {
             'name': [name],
-            'display_name': [value_dict.get('display_name')],
+            'display_name': [value_dict.get('display_name', name)],
             'draft_order': [value_dict.get('draft_order')],
         }
         df = pandas.DataFrame(data=data_dict)
@@ -243,8 +243,8 @@ def refresh_users_configuration(engine):
 
 def run(engine):
     #model.init_database()
-    refresh_players_stats(engine)
-    #refresh_users_configuration(engine)
+    #refresh_players_stats(engine)
+    refresh_users_configuration(engine)
 
 
 if __name__ == '__main__':

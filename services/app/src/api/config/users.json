@@ -1,27 +1,33 @@
 {
-  "ben_neal@gmail.com": {
+  "bneal16@gmail.com": {
     "first_name": "ben",
     "last_name": "neal",
     "is_active": 1,
-    "team_ownership": ["Team Neal", "Team Ben"]
+    "team_ownership": ["Ben"]
   },
   "collindanielson@gmail.com": {
     "first_name": "collin",
     "last_name": "danielson",
     "email": "collin@gmail.com",
     "is_active": 1,
-    "team_ownership": ["Team Collin"]
+    "team_ownership": ["Dem Skins", "Collin"]
   },
   "JohnNeal@gmail.com": {
     "first_name": "john",
     "last_name": "neal",
     "is_active": 1,
-    "team_ownership": ["Team Neal", "Team Ben"]
+    "team_ownership": ["John", "Louise", "Ben"]
   },
   "KimHorworth@gmail.com": {
-    "first_name": "john",
-    "last_name": "neal",
+    "first_name": "kim",
+    "last_name": "horworth",
     "is_active": 1,
-    "team_ownership": ["Team Kim", "K2"]
+    "team_ownership": ["Special K", "Kim", "Ozone"]
+  },
+  "Kevin@gmail.com": {
+    "first_name": "kevin",
+    "last_name": "horworth",
+    "is_active": 1,
+    "team_ownership": ["Special K", "Kevin"]
   }
 }

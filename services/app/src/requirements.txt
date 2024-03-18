@@ -14,3 +14,5 @@ html5lib
 bs4
 requests
 streamlit
+streamlit-pandas
+altair==4.0

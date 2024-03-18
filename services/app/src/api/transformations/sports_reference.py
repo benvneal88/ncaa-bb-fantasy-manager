@@ -7,15 +7,13 @@ from api.utils import logger as log_util
 from api import model
 from api.utils import ingest
 
-LOGGER_NAME = 'sports_reference'
 LOG_LEVEL = 'INFO'
 ROOT_URL = 'https://www.sports-reference.com'
 YEAR = '2023'
 
 CONSTANTS_DICT = model.get_model_constants(data_source='sportsref')
 
-logger = log_util.get_logger(LOGGER_NAME, LOG_LEVEL)
-
+logger = log_util.get_logger(__name__, LOG_LEVEL)
 
 
 def get_roster_url(school, table_name):
@@ -64,9 +62,10 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
     return file_data
 
 
-def get_box_scores_raw(date):
+def get_box_scores_raw(date, is_refresh):
     object_type = 'box_scores'
     web_url = f'{ROOT_URL}/cbb/boxscores/index.cgi?month=3&day=7&year=2024'
+    u2 = "https://www.sports-reference.com/cbb/boxscores/2024-03-07-03-ucla.html"
     root_path = CONSTANTS_DICT["root_data_path"]
     file_path = os.path.join(root_path, object_type, "schools.html")
 
@@ -78,6 +77,7 @@ def get_box_scores_raw(date):
         file_data = file.read()
 
     return file_data
+
 
 def get_school_list_raw(is_refresh=False):
     """"""

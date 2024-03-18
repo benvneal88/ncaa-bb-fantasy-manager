@@ -1,22 +1,29 @@
 {
-  "Team Neal": {
-    "display_name": "Neal",
+  "Special K": {
     "draft_order": "1"
   },
-  "Team Ben": {
-    "display_name": "Ben",
+  "Dem Skins": {
     "draft_order": "2"
   },
-  "Team Collin": {
-    "display_name": "Collin",
+  "Collin": {
     "draft_order": "3"
   },
-  "Team Kim": {
-    "display_name": "Kim",
+  "John": {
     "draft_order": "4"
   },
-  "K2": {
-    "display_name": "K2",
+  "Louise": {
     "draft_order": "5"
+  },
+  "Kim": {
+    "draft_order": "6"
+  },
+  "Kevin": {
+    "draft_order": "7"
+  },
+  "Ozone": {
+    "draft_order": "8"
+  },
+  "Ben": {
+    "draft_order": "9"
   }
 }

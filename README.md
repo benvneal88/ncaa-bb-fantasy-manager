@@ -7,6 +7,7 @@ This project contains a webapp and database for managing ncaa basketball march m
     cd services/app/src
     flask --debug run --port 5001
     # http://127.0.0.1:5001
+    streamlit run streamlit_app.py
 
 
 ### Running Web App Locally
@@ -24,6 +25,7 @@ Getting Started:
     db_engine = model.get_engine()
     model.init_database(db_engine)
 
+    # populate data into database
     python3 api/transformations/populate_model.py
 
 Inspecting Database Tables:
