@@ -107,7 +107,8 @@ def tbl_player(engine):
     logger.debug(insert_df)
 
     for index, row in insert_df.iterrows():
-        insert_query = f"INSERT INTO {table_name} (first_name, last_name, ppg, fk_ball_team_id) SELECT `First Name`,`Last Name`, CAST(PPG as FLOAT), {row['id']} FROM stg_sportsref_roster where School = '{row['name']}'"
+        school = row['name'].replace("'", "''")
+        insert_query = f"INSERT INTO {table_name} (first_name, last_name, ppg, fk_ball_team_id) SELECT `First Name`,`Last Name`, CAST(PPG as FLOAT), {row['id']} FROM stg_sportsref_roster where School = '{school}'"
         with engine.connect() as connection:
             connection.execute(insert_query)
 
@@ -242,8 +243,8 @@ def refresh_users_configuration(engine):
 
 
 def run(engine):
-    #model.init_database()
-    #refresh_players_stats(engine)
+    model.init_database(engine)
+    refresh_players_stats(engine)
     refresh_users_configuration(engine)
 
 

@@ -27,6 +27,8 @@ def get_front_end_column(column_name):
         return Column(name='team', label='Team')
     if column_name == "region":
         return Column(name='region', label='Region')
+    if column_name == "seed":
+        return Column(name='seed', label='Seed')
 
 
 

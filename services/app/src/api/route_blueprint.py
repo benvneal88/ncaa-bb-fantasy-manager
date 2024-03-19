@@ -22,7 +22,7 @@ def get_players():
     df = pd.read_sql_query(
         f"""select 
             t.name as team, 
-            t.seed as seed, 
+            t.seed as seed,
             t.region as region, 
             CONCAT(p.first_name, ' ', p.last_name) as name, 
             p.ppg as ppg,

@@ -9,7 +9,7 @@ from api.utils import ingest
 
 LOG_LEVEL = 'INFO'
 ROOT_URL = 'https://www.sports-reference.com'
-YEAR = '2023'
+YEAR = '2024'
 
 CONSTANTS_DICT = model.get_model_constants(data_source='sportsref')
 
@@ -34,6 +34,7 @@ def get_school_list_raw(is_refresh=False):
 
 
 def get_roster_url(school, table_name):
+    school = school.replace("'", "''")
     engine = model.get_engine()
     query = f"select CONCAT('{ROOT_URL}', url, '{YEAR}.html') as url from {table_name} where School = '{school}'"
     #print(query)
@@ -66,11 +67,11 @@ def get_school_roster_raw(engine, school: str, is_refresh: bool):
 
     # download file if needed
     if is_refresh:
+        time.sleep(5)
         url = get_roster_url(school, CONSTANTS_DICT["stg_schools_table_name"])
         if url is None:
             logger.error(f"No roster url found for school {school}")
         else:
-            time.sleep(1)
             ingest.download_file(url, file_path)
 
     with open(file_path, 'r') as file:
@@ -86,6 +87,23 @@ def get_box_scores_raw(date, is_refresh):
     root_path = CONSTANTS_DICT["root_data_path"]
     date_str = date #todo format
     file_path = os.path.join(root_path, object_type, date_str, "scores_list.html")
+
+    # download file if needed
+    if is_refresh:
+        ingest.download_file(web_url, file_path)
+
+    with open(file_path, 'r') as file:
+        file_data = file.read()
+
+    return file_data
+
+
+def get_box_score_raw(date, box_score_id, is_refresh):
+    object_type = 'box_scores'
+    web_url = f'{ROOT_URL}/cbb/boxscores/index.cgi?month=3&day=7&year=2024'
+    #u2 = "https://www.sports-reference.com/cbb/boxscores/2024-03-07-03-ucla.html"
+    root_path = CONSTANTS_DICT["root_data_path"]
+    file_path = os.path.join(root_path, object_type, date, box_score_id, "box_score.html")
 
     # download file if needed
     if is_refresh:
@@ -141,7 +159,7 @@ def transform_school_list_raw(data_str):
 
 
 def transform_roster_raw(data_str, school_name):
-    summary_parse_regex = re.compile(r"([0-9\.]{3,}).*([0-9\.]{3,}).*([0-9\.]{3,}).*")
+    summary_parse_regex = re.compile(r"([0-9\.]{2,}).*([0-9\.]{3,}).*([0-9\.]{3,}).*")
     name_parse_regex = re.compile(r"([a-zA-Z'\.]+) ([a-zA-Z'\. ]+)")
 
     def _parse_summary(summary_str):
@@ -168,6 +186,7 @@ def transform_roster_raw(data_str, school_name):
     dfs = pandas.read_html(str(roster_html), flavor="bs4")
     roster_df = dfs[0]
     roster_df["School"] = school_name
+    roster_df = roster_df[roster_df['Summary'].notna()]
     roster_df["PPG"], roster_df["RPG"], roster_df["APG"] = zip(*roster_df['Summary'].apply(lambda x: _parse_summary(x)))
     roster_df = roster_df.drop("Summary", axis=1)
 
@@ -193,6 +212,7 @@ def insert_stg_roster(engine, school_list=[]):
     #fetch_from_web
 
     for school_name in school_list:
+        # delay fetching to prevent black listing
         file_data = get_school_roster_raw(engine, school_name, is_refresh=False)
         roster_df = transform_roster_raw(file_data, school_name)
         logger.info(f"Inserting roster {school_name} into table {stg_roster_table_name}")
@@ -204,7 +224,7 @@ def insert_stg_box_scores(engine, date):
     box_score_urls = transform_box_scores(data)
     box_scores = []
     for box_score_url in box_score_urls:
-        box_scores.append({"date": date, "url": box_score_url})
+        box_scores.append({"box_score_id": "", "date": date, "url": box_score_url})
     df = pandas.DataFrame(box_scores)
     df.to_sql(CONSTANTS_DICT["stg_box_scores_list_table_name"], con=engine, if_exists='append')
 

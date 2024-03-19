@@ -19,13 +19,14 @@ def fetch_player_data():
 
 
 AwesomeTable(fetch_player_data(), columns=[
-    commons.get_front_end_column("team"),
     commons.get_front_end_column("region"),
+    commons.get_front_end_column("seed"),
+    commons.get_front_end_column("team"),
     commons.get_front_end_column("player_name"),
     commons.get_front_end_column("ppg"),
     commons.get_front_end_column("draft_player"),
     commons.get_front_end_column("is_drafted")
-], show_search=True)
+], show_search=True, show_order=True)
 
 
 # data_schema = {
